@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>350 Cybersecurity Acronyms</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0e14;
+    --surface: #111720;
+    --surface2: #19212e;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --text: #e8edf4;
+    --muted: #6b7a90;
+    --accent: #00e5a0;
+    --accent2: #0099ff;
+    --network: #0099ff;
+    --threat: #ff4757;
+    --crypto: #a78bfa;
+    --compliance: #34d399;
+    --protocol: #38bdf8;
+    --identity: #fb923c;
+    --operations: #f472b6;
+    --infra: #facc15;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* grid bg */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  header {
+    position: relative;
+    z-index: 1;
+    padding: 3rem 2rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    font-weight: 300;
+    margin-bottom: 2rem;
+  }
+
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+    max-width: 420px;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+    width: 16px; height: 16px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 10px 12px 10px 38px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input[type="text"]:focus { border-color: var(--accent); }
+  input[type="text"]::placeholder { color: var(--muted); }
+
+  .filters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 8px 14px;
+    border-radius: 4px;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover { border-color: var(--border2); color: var(--text); }
+  .filter-btn.active { color: var(--bg); font-weight: 600; }
+
+  .filter-btn[data-cat=""].active    { background: var(--accent); border-color: var(--accent); }
+  .filter-btn[data-cat="network"].active    { background: var(--network); border-color: var(--network); }
+  .filter-btn[data-cat="threat"].active     { background: var(--threat); border-color: var(--threat); }
+  .filter-btn[data-cat="crypto"].active     { background: var(--crypto); border-color: var(--crypto); }
+  .filter-btn[data-cat="compliance"].active { background: var(--compliance); border-color: var(--compliance); }
+  .filter-btn[data-cat="protocol"].active   { background: var(--protocol); border-color: var(--protocol); }
+  .filter-btn[data-cat="identity"].active   { background: var(--identity); border-color: var(--identity); }
+  .filter-btn[data-cat="operations"].active { background: var(--operations); border-color: var(--operations); }
+  .filter-btn[data-cat="infra"].active      { background: var(--infra); border-color: var(--infra); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem 4rem;
+  }
+
+  .stats-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .stats-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .stats-count span { color: var(--accent); }
+
+  .view-toggle { display: flex; gap: 4px; }
+  .view-btn {
+    padding: 6px 10px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.15s;
+  }
+  .view-btn.active { background: var(--surface2); color: var(--text); }
+
+  /* CARD GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+
+  .grid.list-view {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    cursor: default;
+    transition: border-color 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.3s ease both;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .card:hover { border-color: var(--border2); transform: translateY(-1px); }
+  .card:hover::before { opacity: 1; }
+
+  .card[data-cat="network"]::before    { background: var(--network); }
+  .card[data-cat="threat"]::before     { background: var(--threat); }
+  .card[data-cat="crypto"]::before     { background: var(--crypto); }
+  .card[data-cat="compliance"]::before { background: var(--compliance); }
+  .card[data-cat="protocol"]::before   { background: var(--protocol); }
+  .card[data-cat="identity"]::before   { background: var(--identity); }
+  .card[data-cat="operations"]::before { background: var(--operations); }
+  .card[data-cat="infra"]::before      { background: var(--infra); }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .acronym-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .card[data-cat="network"]    .acronym-text { color: var(--network); }
+  .card[data-cat="threat"]     .acronym-text { color: var(--threat); }
+  .card[data-cat="crypto"]     .acronym-text { color: var(--crypto); }
+  .card[data-cat="compliance"] .acronym-text { color: var(--compliance); }
+  .card[data-cat="protocol"]   .acronym-text { color: var(--protocol); }
+  .card[data-cat="identity"]   .acronym-text { color: var(--identity); }
+  .card[data-cat="operations"] .acronym-text { color: var(--operations); }
+  .card[data-cat="infra"]      .acronym-text { color: var(--infra); }
+
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .card[data-cat="network"]    .badge { background: rgba(0,153,255,0.12); color: var(--network); }
+  .card[data-cat="threat"]     .badge { background: rgba(255,71,87,0.12); color: var(--threat); }
+  .card[data-cat="crypto"]     .badge { background: rgba(167,139,250,0.12); color: var(--crypto); }
+  .card[data-cat="compliance"] .badge { background: rgba(52,211,153,0.12); color: var(--compliance); }
+  .card[data-cat="protocol"]   .badge { background: rgba(56,189,248,0.12); color: var(--protocol); }
+  .card[data-cat="identity"]   .badge { background: rgba(251,146,60,0.12); color: var(--identity); }
+  .card[data-cat="operations"] .badge { background: rgba(244,114,182,0.12); color: var(--operations); }
+  .card[data-cat="infra"]      .badge { background: rgba(250,204,21,0.12); color: var(--infra); }
+
+  .full-name {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 7px;
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  .definition {
+    font-size: 13px;
+    color: #aab4c4;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* LIST VIEW card tweaks */
+  .list-view .card {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 0 20px;
+    padding: 14px 18px;
+    align-items: start;
+  }
+
+  .list-view .card-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .list-view .card-right { }
+
+  .list-view .card-header { margin-bottom: 0; }
+  .list-view .full-name { margin-bottom: 4px; }
+
+  .no-results {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+  }
+
+  .no-results span { color: var(--accent); }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 600px) {
+    header, main { padding-left: 1rem; padding-right: 1rem; }
+    h1 { font-size: 1.6rem; }
+    .list-view .card { grid-template-columns: 1fr; }
+    .list-view .card-left { flex-direction: row; align-items: center; flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">// reference guide</div>
+  <h1><span>350</span> Cybersecurity<br>Acronyms</h1>
+  <p class="subtitle">Every acronym you need to know — searchable, filterable, shareable.</p>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search" placeholder="Search acronyms, names, definitions..." oninput="render()" />
+    </div>
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-cat="" onclick="setFilter('')">All</button>
+      <button class="filter-btn" data-cat="network" onclick="setFilter('network')">Network</button>
+      <button class="filter-btn" data-cat="threat" onclick="setFilter('threat')">Threat &amp; Attack</button>
+      <button class="filter-btn" data-cat="crypto" onclick="setFilter('crypto')">Crypto</button>
+      <button class="filter-btn" data-cat="compliance" onclick="setFilter('compliance')">Compliance</button>
+      <button class="filter-btn" data-cat="protocol" onclick="setFilter('protocol')">Protocols</button>
+      <button class="filter-btn" data-cat="identity" onclick="setFilter('identity')">Identity</button>
+      <button class="filter-btn" data-cat="operations" onclick="setFilter('operations')">Operations</button>
+      <button class="filter-btn" data-cat="infra" onclick="setFilter('infra')">Infrastructure</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="stats-bar">
+    <div class="stats-count" id="stats"></div>
+    <div class="view-toggle">
+      <button class="view-btn active" id="grid-btn" onclick="setView('grid')" title="Grid view">⊞</button>
+      <button class="view-btn" id="list-btn" onclick="setView('list')" title="List view">☰</button>
+    </div>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>CYBERSECURITY ACRONYM REFERENCE &nbsp;·&nbsp; 350 TERMS</footer>
+
+<script>
+const data = [
+  {a:"AAA",f:"Authentication, Authorization, Accounting",d:"Framework for controlling network access through user verification, permissions, and activity logging.",c:"identity"},
+  {a:"ACL",f:"Access Control List",d:"Rules that define which users or systems can access specific resources.",c:"identity"},
+  {a:"AES",f:"Advanced Encryption Standard",d:"Symmetric block cipher widely used for data encryption, available in 128/192/256-bit key sizes.",c:"crypto"},
+  {a:"APT",f:"Advanced Persistent Threat",d:"Sophisticated, long-term cyberattack by well-resourced adversaries targeting specific organizations.",c:"threat"},
+  {a:"ARP",f:"Address Resolution Protocol",d:"Maps IP addresses to physical MAC addresses on a local network.",c:"protocol"},
+  {a:"BYOD",f:"Bring Your Own Device",d:"Policy allowing employees to use personal devices for work, introducing unique security challenges.",c:"compliance"},
+  {a:"CA",f:"Certificate Authority",d:"Trusted entity that issues digital certificates verifying the identity of websites and organizations.",c:"crypto"},
+  {a:"CASB",f:"Cloud Access Security Broker",d:"Security policy enforcement point between cloud users and cloud services.",c:"infra"},
+  {a:"CICD",f:"Continuous Integration / Continuous Deployment",d:"DevOps practice of automating build, test, and deployment pipelines.",c:"operations"},
+  {a:"CISO",f:"Chief Information Security Officer",d:"Senior executive responsible for an organization's information and data security strategy.",c:"compliance"},
+  {a:"CTEM",f:"Continuous Threat Exposure Management",d:"Ongoing process to identify, assess, and reduce an organization's attack surface.",c:"threat"},
+  {a:"CVE",f:"Common Vulnerabilities and Exposures",d:"Publicly disclosed cybersecurity vulnerabilities assigned a unique identifier.",c:"threat"},
+  {a:"CVSS",f:"Common Vulnerability Scoring System",d:"Standardized framework for rating the severity of security vulnerabilities on a 0–10 scale.",c:"threat"},
+  {a:"DDoS",f:"Distributed Denial of Service",d:"Attack that floods a target with traffic from many sources, making it unavailable.",c:"threat"},
+  {a:"DEP",f:"Data Execution Prevention",d:"Security feature that prevents code from running in memory regions marked as non-executable.",c:"infra"},
+  {a:"DFIR",f:"Digital Forensics and Incident Response",d:"Combined discipline of investigating cyber incidents and collecting digital evidence.",c:"operations"},
+  {a:"DLP",f:"Data Loss Prevention",d:"Tools and policies that detect and prevent unauthorized transmission of sensitive data.",c:"compliance"},
+  {a:"DMZ",f:"Demilitarized Zone",d:"Network segment that separates internal systems from the public internet, hosting externally accessible services.",c:"network"},
+  {a:"DNS",f:"Domain Name System",d:"System that translates human-readable domain names into IP addresses.",c:"protocol"},
+  {a:"DoS",f:"Denial of Service",d:"Attack that overwhelms a system to make it unavailable to legitimate users.",c:"threat"},
+  {a:"EAP",f:"Extensible Authentication Protocol",d:"Authentication framework used in wireless networks and point-to-point connections.",c:"protocol"},
+  {a:"EDR",f:"Endpoint Detection and Response",d:"Security solution that monitors endpoints for suspicious behavior and enables investigation and remediation.",c:"operations"},
+  {a:"EPSS",f:"Exploit Prediction Scoring System",d:"Model estimating the probability that a CVE will be exploited in the wild.",c:"threat"},
+  {a:"FIM",f:"File Integrity Monitoring",d:"Process of validating OS and application files using checksums to detect unauthorized changes.",c:"operations"},
+  {a:"FISMA",f:"Federal Information Security Management Act",d:"US law mandating federal agencies protect government information systems.",c:"compliance"},
+  {a:"FTP",f:"File Transfer Protocol",d:"Standard network protocol for transferring files — unencrypted, largely replaced by SFTP.",c:"protocol"},
+  {a:"GRC",f:"Governance, Risk, and Compliance",d:"Integrated approach to managing an organization's governance, risk management, and regulatory compliance.",c:"compliance"},
+  {a:"HIPAA",f:"Health Insurance Portability and Accountability Act",d:"US law protecting sensitive patient health information from disclosure without consent.",c:"compliance"},
+  {a:"HIDS",f:"Host-based Intrusion Detection System",d:"Monitors a single host for suspicious activity and policy violations.",c:"operations"},
+  {a:"HSM",f:"Hardware Security Module",d:"Physical device that manages and safeguards digital keys for strong authentication.",c:"crypto"},
+  {a:"HTTP",f:"Hypertext Transfer Protocol",d:"Foundation of data communication on the web — unencrypted by default.",c:"protocol"},
+  {a:"HTTPS",f:"HTTP Secure",d:"HTTP over TLS/SSL, encrypting data in transit between client and server.",c:"protocol"},
+  {a:"IAM",f:"Identity and Access Management",d:"Framework for managing digital identities and controlling resource access.",c:"identity"},
+  {a:"IDS",f:"Intrusion Detection System",d:"Monitors network or system traffic for suspicious activity and policy violations.",c:"operations"},
+  {a:"IPS",f:"Intrusion Prevention System",d:"Network security tool that monitors traffic and actively blocks detected threats.",c:"operations"},
+  {a:"IOC",f:"Indicator of Compromise",d:"Evidence on a network or system suggesting a security breach has occurred.",c:"threat"},
+  {a:"IOT",f:"Internet of Things",d:"Network of physical devices embedded with sensors and software that connect to the internet.",c:"infra"},
+  {a:"IP",f:"Internet Protocol",d:"Principal communications protocol for routing data packets across networks.",c:"protocol"},
+  {a:"IPSec",f:"Internet Protocol Security",d:"Suite of protocols that encrypts and authenticates IP communications.",c:"crypto"},
+  {a:"ISO",f:"International Organization for Standardization",d:"Body that develops international standards including ISO 27001 for information security.",c:"compliance"},
+  {a:"LDAP",f:"Lightweight Directory Access Protocol",d:"Protocol for accessing and maintaining distributed directory information services.",c:"protocol"},
+  {a:"LUKS",f:"Linux Unified Key Setup",d:"Standard disk encryption specification for Linux.",c:"crypto"},
+  {a:"MAC",f:"Mandatory Access Control",d:"Access control policy where the OS enforces permissions based on classification labels.",c:"identity"},
+  {a:"MFA",f:"Multi-Factor Authentication",d:"Authentication requiring two or more verification factors: something you know, have, or are.",c:"identity"},
+  {a:"MITRE",f:"MITRE ATT&CK",d:"Globally accessible knowledge base of adversary tactics and techniques based on real-world observations.",c:"threat"},
+  {a:"MSP",f:"Managed Service Provider",d:"Third-party company that remotely manages a customer's IT infrastructure and systems.",c:"infra"},
+  {a:"MSSP",f:"Managed Security Service Provider",d:"Outsourced provider specializing in security monitoring and management services.",c:"operations"},
+  {a:"MTTR",f:"Mean Time to Respond",d:"Average time to detect and contain a security incident.",c:"operations"},
+  {a:"NAC",f:"Network Access Control",d:"Solution that enforces security policy compliance on devices before granting network access.",c:"network"},
+  {a:"NAT",f:"Network Address Translation",d:"Remaps one IP address space to another, commonly used to share a single public IP.",c:"network"},
+  {a:"NIST",f:"National Institute of Standards and Technology",d:"US agency that publishes widely adopted cybersecurity frameworks including the CSF and SP 800 series.",c:"compliance"},
+  {a:"NIDS",f:"Network Intrusion Detection System",d:"Monitors entire network traffic for threats, unlike host-based IDS.",c:"operations"},
+  {a:"NTP",f:"Network Time Protocol",d:"Protocol for synchronizing clocks across networked devices — critical for log correlation.",c:"protocol"},
+  {a:"OAUTH",f:"Open Authorization",d:"Open standard protocol for token-based authorization and delegated access.",c:"identity"},
+  {a:"OSINT",f:"Open Source Intelligence",d:"Intelligence gathered from publicly available sources to support security investigations.",c:"operations"},
+  {a:"OWASP",f:"Open Web Application Security Project",d:"Nonprofit providing free resources on web application security, including the famous Top 10 list.",c:"compliance"},
+  {a:"PAM",f:"Privileged Access Management",d:"Tools and processes for securing, managing, and monitoring privileged accounts.",c:"identity"},
+  {a:"PCI DSS",f:"Payment Card Industry Data Security Standard",d:"Security standards for organizations handling credit card data.",c:"compliance"},
+  {a:"PGP",f:"Pretty Good Privacy",d:"Encryption program providing cryptographic privacy and authentication for data communications.",c:"crypto"},
+  {a:"PHI",f:"Protected Health Information",d:"Individually identifiable health information protected under HIPAA.",c:"compliance"},
+  {a:"PII",f:"Personally Identifiable Information",d:"Data that could be used to identify a specific individual, such as SSN, email, or biometrics.",c:"compliance"},
+  {a:"PKI",f:"Public Key Infrastructure",d:"System of roles, policies, and procedures for creating, managing, and distributing digital certificates.",c:"crypto"},
+  {a:"POC",f:"Proof of Concept",d:"In security, code or demonstration proving a vulnerability is exploitable.",c:"threat"},
+  {a:"RBA",f:"Risk-Based Authentication",d:"Dynamically adjusts authentication requirements based on context and risk score.",c:"identity"},
+  {a:"RBAC",f:"Role-Based Access Control",d:"Restricts system access based on a user's organizational role.",c:"identity"},
+  {a:"RDP",f:"Remote Desktop Protocol",d:"Microsoft protocol enabling remote GUI access to a Windows system — frequent attack target.",c:"protocol"},
+  {a:"RFC",f:"Request for Comments",d:"Published standards and protocols from the IETF defining internet specifications.",c:"protocol"},
+  {a:"RTO",f:"Recovery Time Objective",d:"Maximum acceptable downtime after a disaster before business impact becomes unacceptable.",c:"operations"},
+  {a:"RPO",f:"Recovery Point Objective",d:"Maximum acceptable amount of data loss measured in time during a recovery scenario.",c:"operations"},
+  {a:"SAML",f:"Security Assertion Markup Language",d:"XML-based standard for exchanging authentication and authorization data between parties.",c:"identity"},
+  {a:"SCAP",f:"Security Content Automation Protocol",d:"NIST specification for standardizing security configuration checks and vulnerability reporting.",c:"compliance"},
+  {a:"SIEM",f:"Security Information and Event Management",d:"Platform that aggregates, correlates, and analyzes security event data across an environment.",c:"operations"},
+  {a:"SMTP",f:"Simple Mail Transfer Protocol",d:"Protocol for sending email across networks.",c:"protocol"},
+  {a:"SNMP",f:"Simple Network Management Protocol",d:"Protocol for collecting and organizing information about managed network devices.",c:"protocol"},
+  {a:"SOC",f:"Security Operations Center",d:"Centralized team monitoring and responding to cybersecurity threats around the clock.",c:"operations"},
+  {a:"SOAR",f:"Security Orchestration, Automation, and Response",d:"Platforms that automate security workflows and streamline incident response.",c:"operations"},
+  {a:"SOX",f:"Sarbanes-Oxley Act",d:"US law requiring accurate financial reporting and internal controls — affects IT audit and compliance.",c:"compliance"},
+  {a:"SPF",f:"Sender Policy Framework",d:"Email authentication method specifying which mail servers can send on behalf of a domain.",c:"protocol"},
+  {a:"SQL",f:"Structured Query Language",d:"Language for managing databases — SQL injection is one of the most common web vulnerabilities.",c:"threat"},
+  {a:"SSH",f:"Secure Shell",d:"Cryptographic protocol for secure remote login and command execution over an unsecured network.",c:"protocol"},
+  {a:"SSL",f:"Secure Sockets Layer",d:"Predecessor to TLS — deprecated but the term is still commonly used to mean TLS.",c:"crypto"},
+  {a:"SSO",f:"Single Sign-On",d:"Authentication scheme allowing users to log in once and access multiple applications.",c:"identity"},
+  {a:"STIG",f:"Security Technical Implementation Guide",d:"DISA configuration standards for securing DoD IT systems.",c:"compliance"},
+  {a:"SWG",f:"Secure Web Gateway",d:"Security solution that filters internet traffic to enforce acceptable use and protect against threats.",c:"network"},
+  {a:"TCP",f:"Transmission Control Protocol",d:"Core internet protocol ensuring reliable, ordered, error-checked delivery of data packets.",c:"protocol"},
+  {a:"TLS",f:"Transport Layer Security",d:"Cryptographic protocol securing communications over a network — the current standard replacing SSL.",c:"crypto"},
+  {a:"TTPs",f:"Tactics, Techniques, and Procedures",d:"Description of how threat actors operate, used to characterize and attribute cyberattacks.",c:"threat"},
+  {a:"UAT",f:"User Acceptance Testing",d:"Final testing phase ensuring software meets requirements before deployment.",c:"operations"},
+  {a:"UDP",f:"User Datagram Protocol",d:"Connectionless transport protocol offering speed over reliability — used in video streaming, DNS.",c:"protocol"},
+  {a:"UEM",f:"Unified Endpoint Management",d:"Single platform to manage all endpoints including desktops, mobile, and IoT.",c:"infra"},
+  {a:"URL",f:"Uniform Resource Locator",d:"Web address specifying the location of a resource on the internet.",c:"protocol"},
+  {a:"UTM",f:"Unified Threat Management",d:"All-in-one security appliance combining firewall, IDS/IPS, antivirus, and more.",c:"network"},
+  {a:"VPN",f:"Virtual Private Network",d:"Encrypted tunnel that secures internet traffic and masks user IP addresses.",c:"network"},
+  {a:"WAF",f:"Web Application Firewall",d:"Filters and monitors HTTP traffic between a web app and the internet to block attacks.",c:"network"},
+  {a:"XDR",f:"Extended Detection and Response",d:"Unified security platform integrating multiple tools to detect and respond to threats across layers.",c:"operations"},
+  {a:"XSS",f:"Cross-Site Scripting",d:"Injection attack where malicious scripts are embedded into trusted web pages viewed by other users.",c:"threat"},
+  {a:"ZTNA",f:"Zero Trust Network Access",d:"Security model requiring strict identity verification for every user and device, regardless of location.",c:"network"},
+  {a:"ZAP",f:"Zed Attack Proxy",d:"OWASP open-source tool for finding security vulnerabilities in web applications.",c:"threat"},
+  {a:"RSA",f:"Rivest-Shamir-Adleman",d:"Widely used public-key encryption algorithm for securing data transmission and digital signatures.",c:"crypto"},
+  {a:"DSA",f:"Digital Signature Algorithm",d:"NIST standard algorithm for generating and verifying digital signatures.",c:"crypto"},
+  {a:"ECDSA",f:"Elliptic Curve Digital Signature Algorithm",d:"Variant of DSA using elliptic curve cryptography — smaller key sizes with equivalent strength.",c:"crypto"},
+  {a:"ECDH",f:"Elliptic Curve Diffie-Hellman",d:"Key exchange protocol using elliptic curve math to establish a shared secret over a public channel.",c:"crypto"},
+  {a:"DH",f:"Diffie-Hellman",d:"Original key exchange protocol allowing two parties to establish a shared secret without prior contact.",c:"crypto"},
+  {a:"SHA",f:"Secure Hash Algorithm",d:"Family of cryptographic hash functions (SHA-1, SHA-256, SHA-512) used for data integrity and digital signatures.",c:"crypto"},
+  
+  {a:"AES-256",f:"Advanced Encryption Standard 256-bit",d:"AES using a 256-bit key — the strongest AES variant, used where maximum encryption strength is required.",c:"crypto"},
+  {a:"ECC",f:"Elliptic Curve Cryptography",d:"Public-key cryptography using elliptic curves — smaller keys and faster performance than RSA.",c:"crypto"},
+  {a:"ECDHE",f:"Elliptic Curve Diffie-Hellman Ephemeral",d:"Key exchange using elliptic curves with ephemeral keys, providing perfect forward secrecy.",c:"crypto"},
+  {a:"DHE",f:"Diffie-Hellman Ephemeral",d:"Diffie-Hellman key exchange using temporary keys — enables perfect forward secrecy.",c:"crypto"},
+  {a:"PFS",f:"Perfect Forward Secrecy",d:"Cryptographic property ensuring session keys are not compromised even if long-term keys are later exposed.",c:"crypto"},
+  {a:"HMAC",f:"Hashed Message Authentication Code",d:"Uses a cryptographic hash and secret key to verify data integrity and authenticity.",c:"crypto"},
+  {a:"CRL",f:"Certificate Revocation List",d:"List published by a CA of certificates that have been revoked before their expiration date.",c:"crypto"},
+  {a:"OCSP",f:"Online Certificate Status Protocol",d:"Real-time protocol for checking whether a digital certificate has been revoked.",c:"crypto"},
+  {a:"CSR",f:"Certificate Signing Request",d:"Encoded message sent to a CA to apply for a digital certificate, containing the public key and identity info.",c:"crypto"},
+  {a:"TPM",f:"Trusted Platform Module",d:"Dedicated microcontroller on a motherboard that stores cryptographic keys and enables hardware-based security.",c:"crypto"},
+  {a:"DES",f:"Digital Encryption Standard",d:"Older symmetric-key encryption algorithm — considered insecure today, replaced by AES.",c:"crypto"},
+  {a:"RC4",f:"Rivest Cipher version 4",d:"Stream cipher once widely used in SSL/WEP — now considered cryptographically broken.",c:"crypto"},
+  {a:"MD5",f:"Message Digest 5",d:"Widely used hash function producing a 128-bit hash — considered broken for security purposes.",c:"crypto"},
+  {a:"PBKDF2",f:"Password-based Key Derivation Function 2",d:"Applies a pseudorandom function to a password with a salt to produce a derived key, slowing brute-force attacks.",c:"crypto"},
+  {a:"S/MIME",f:"Secure/Multipurpose Internet Mail Extensions",d:"Standard for public-key encryption and signing of email messages.",c:"crypto"},
+  
+  {a:"RADIUS",f:"Remote Authentication Dial-in User Service",d:"Networking protocol providing centralized authentication, authorization, and accounting for network access.",c:"identity"},
+  {a:"TACACS+",f:"Terminal Access Controller Access Control System Plus",d:"Cisco-developed protocol providing granular AAA services, separating authentication from authorization.",c:"identity"},
+  {a:"CHAP",f:"Challenge Handshake Authentication Protocol",d:"Authentication protocol that verifies identity using a three-way handshake without sending the password over the wire.",c:"identity"},
+  {a:"PEAP",f:"Protected Extensible Authentication Protocol",d:"Encapsulates EAP inside a TLS tunnel to protect authentication credentials.",c:"identity"},
+  {a:"HOTP",f:"HMAC-based One-time Password",d:"One-time password algorithm using HMAC and an incrementing counter — used in hardware tokens.",c:"identity"},
+  {a:"TOTP",f:"Time-based One-time Password",d:"One-time password algorithm using the current time as the counter — used in authenticator apps.",c:"identity"},
+  {a:"PIV",f:"Personal Identity Verification",d:"US federal smart card standard used for employee authentication to facilities and systems.",c:"identity"},
+  {a:"IdP",f:"Identity Provider",d:"System that creates, maintains, and manages identity information and provides authentication services.",c:"identity"},
+  {a:"DAC",f:"Discretionary Access Control",d:"Access control model where the resource owner decides who can access their resources.",c:"identity"},
+  {a:"ABAC",f:"Attribute-based Access Control",d:"Access control model granting permissions based on attributes of users, resources, and environment.",c:"identity"},
+  {a:"MDM",f:"Mobile Device Management",d:"Software for managing, monitoring, and securing employee mobile devices deployed across an organization.",c:"identity"},
+  
+  {a:"DHCP",f:"Dynamic Host Configuration Protocol",d:"Network protocol that automatically assigns IP addresses and other network configuration to devices.",c:"protocol"},
+  {a:"ICMP",f:"Internet Control Message Protocol",d:"Used by network devices to send error messages and operational information — basis of ping and traceroute.",c:"protocol"},
+  {a:"BGP",f:"Border Gateway Protocol",d:"Routing protocol that manages how data is routed between autonomous systems on the internet.",c:"protocol"},
+  {a:"OSPF",f:"Open Shortest Path First",d:"Link-state routing protocol used within a single autonomous system to find the best network path.",c:"protocol"},
+  {a:"GRE",f:"Generic Routing Encapsulation",d:"Tunneling protocol that encapsulates a wide variety of network layer protocols inside virtual point-to-point links.",c:"protocol"},
+  {a:"L2TP",f:"Layer 2 Tunneling Protocol",d:"Tunneling protocol used to support VPNs — typically paired with IPSec for encryption.",c:"protocol"},
+  {a:"SFTP",f:"Secured File Transfer Protocol",d:"Extension of SSH providing encrypted file transfer over a secure channel.",c:"protocol"},
+  {a:"DKIM",f:"DomainKeys Identified Mail",d:"Email authentication method that adds a digital signature to outgoing messages to verify sender legitimacy.",c:"protocol"},
+  {a:"DMARC",f:"Domain-based Message Authentication Reporting and Conformance",d:"Email authentication policy building on SPF and DKIM to protect domains from spoofing.",c:"protocol"},
+  {a:"IMAP",f:"Internet Message Access Protocol",d:"Protocol for retrieving email that keeps messages on the server and allows access from multiple devices.",c:"protocol"},
+  {a:"SMTPS",f:"Simple Mail Transfer Protocol Secure",d:"SMTP over TLS/SSL, encrypting email in transit between mail servers.",c:"protocol"},
+  
+  {a:"NGFW",f:"Next-generation Firewall",d:"Advanced firewall with deep packet inspection, intrusion prevention, and application awareness beyond port/protocol.",c:"network"},
+  {a:"VLAN",f:"Virtual Local Area Network",d:"Logical segmentation of a network grouping devices regardless of physical location.",c:"network"},
+  {a:"SD-WAN",f:"Software-defined Wide Area Network",d:"Uses software to control connectivity and services between data centers and remote sites.",c:"network"},
+  {a:"SASE",f:"Secure Access Service Edge",d:"Cloud architecture combining WAN capabilities with security functions like CASB and ZTNA.",c:"network"},
+  {a:"WIDS",f:"Wireless Intrusion Detection System",d:"Monitors wireless network traffic for suspicious activity and unauthorized access points.",c:"network"},
+  {a:"WIPS",f:"Wireless Intrusion Prevention System",d:"Actively monitors and blocks threats on wireless networks, including rogue access points.",c:"network"},
+  
+  {a:"SQLi",f:"SQL Injection",d:"Attack inserting malicious SQL code into a query to manipulate or extract database data.",c:"threat"},
+  {a:"CSRF",f:"Cross-site Request Forgery",d:"Attack tricking an authenticated user into unknowingly submitting a malicious request.",c:"threat"},
+  {a:"ASLR",f:"Address Space Layout Randomization",d:"Security technique randomizing memory address locations to make exploitation significantly harder.",c:"threat"},
+  {a:"RAT",f:"Remote Access Trojan",d:"Malware giving an attacker covert remote control over an infected system.",c:"threat"},
+  {a:"STIX",f:"Structured Threat Information eXchange",d:"Standardized language for sharing cyber threat intelligence in a consistent, machine-readable format.",c:"threat"},
+  {a:"TAXII",f:"Trusted Automated eXchange of Indicator Information",d:"Protocol used to exchange STIX cyber threat intelligence over HTTPS.",c:"threat"},
+  {a:"AIS",f:"Automated Indicator Sharing",d:"CISA program enabling real-time exchange of machine-readable cyber threat indicators.",c:"threat"},
+  
+  {a:"GDPR",f:"General Data Protection Regulation",d:"EU regulation governing collection, storage, and processing of personal data of EU residents.",c:"compliance"},
+  {a:"BCP",f:"Business Continuity Planning",d:"Processes ensuring critical business functions continue during and after a disaster.",c:"compliance"},
+  {a:"DRP",f:"Disaster Recovery Plan",d:"Documented process for recovering IT systems and data after a catastrophic event.",c:"compliance"},
+  {a:"BIA",f:"Business Impact Analysis",d:"Process identifying critical business functions and the impact of disrupting them.",c:"compliance"},
+  {a:"AUP",f:"Acceptable Use Policy",d:"Policy defining the acceptable ways employees may use company IT resources.",c:"compliance"},
+  {a:"NDA",f:"Non-disclosure Agreement",d:"Legal contract preventing parties from sharing confidential information with third parties.",c:"compliance"},
+  {a:"SLA",f:"Service-level Agreement",d:"Contract defining expected service levels, uptime guarantees, and remedies between provider and client.",c:"compliance"},
+  {a:"MOU",f:"Memorandum of Understanding",d:"Non-binding agreement outlining intentions and expectations between two parties.",c:"compliance"},
+  {a:"MOA",f:"Memorandum of Agreement",d:"Formal agreement between parties — more binding than an MOU, less than a full contract.",c:"compliance"},
+  {a:"SDLC",f:"Software Development Lifecycle",d:"Structured process for planning, creating, testing, and deploying software securely.",c:"compliance"},
+  {a:"MTBF",f:"Mean Time Between Failures",d:"Average operating time between system failures — used to assess hardware reliability.",c:"compliance"},
+  {a:"SLE",f:"Single Loss Expectancy",d:"Dollar value expected from a single security incident — core to quantitative risk analysis.",c:"compliance"},
+  {a:"ALE",f:"Annualized Loss Expectancy",d:"Expected annual financial loss from a threat: SLE multiplied by the annualized rate of occurrence.",c:"compliance"},
+  {a:"ARO",f:"Annualized Rate of Occurrence",d:"Estimated frequency that a threat event is expected to occur within a year.",c:"compliance"},
+  
+  {a:"IRP",f:"Incident Response Plan",d:"Documented procedures for detecting, responding to, and recovering from security incidents.",c:"operations"},
+  {a:"CIRT",f:"Computer Incident Response Team",d:"Group responsible for responding to and managing cybersecurity incidents.",c:"operations"},
+  {a:"CERT",f:"Computer Emergency Response Team",d:"Team handling cybersecurity incidents and coordinating responses — often used interchangeably with CIRT.",c:"operations"},
+  {a:"API",f:"Application Programming Interface",d:"Set of rules allowing software applications to communicate — commonly targeted in injection and auth attacks.",c:"operations"},
+  {a:"PCAP",f:"Packet Capture",d:"Recording of network packets for analysis — essential tool in incident investigation and forensics.",c:"operations"},
+  {a:"HIPS",f:"Host-based Intrusion Prevention System",d:"Security software on an endpoint that monitors and actively blocks malicious activity in real time.",c:"operations"},
+  {a:"NIPS",f:"Network-based Intrusion Prevention System",d:"Inline network device that inspects traffic and actively blocks detected threats.",c:"operations"},
+  
+  {a:"IaaS",f:"Infrastructure as a Service",d:"Cloud model where the provider manages virtualized computing resources — customer manages OS and above.",c:"infra"},
+  {a:"PaaS",f:"Platform as a Service",d:"Cloud model providing a platform for developers to build apps without managing underlying infrastructure.",c:"infra"},
+  {a:"SaaS",f:"Software as a Service",d:"Cloud model delivering software over the internet — provider manages everything, user just uses the app.",c:"infra"},
+  {a:"CSP",f:"Cloud Service Provider",d:"Company offering cloud computing services including storage, servers, and software.",c:"infra"},
+  {a:"VPC",f:"Virtual Private Cloud",d:"Isolated cloud environment within a public cloud, providing dedicated resources and network controls.",c:"infra"},
+  {a:"SDN",f:"Software-defined Networking",d:"Network architecture separating the control plane from the data plane, managed via software.",c:"infra"},
+  {a:"SCADA",f:"Supervisory Control and Data Acquisition",d:"Industrial control system used to monitor and control physical infrastructure like power grids and pipelines.",c:"infra"},
+  {a:"ICS",f:"Industrial Control Systems",d:"Systems managing industrial operations — critical infrastructure targets including SCADA and PLCs.",c:"infra"},
+  {a:"RTOS",f:"Real-time Operating System",d:"OS designed for real-time applications requiring precise, time-bound processing — common in embedded/ICS.",c:"infra"},
+  {a:"FPGA",f:"Field Programmable Gate Array",d:"Reconfigurable integrated circuit that can be programmed after manufacturing — used in specialized security hardware.",c:"infra"},
+  {a:"VDI",f:"Virtual Desktop Infrastructure",d:"Hosts desktop environments on a centralized server streamed to end users — easier to secure and patch.",c:"infra"},
+  {a:"UPS",f:"Uninterruptible Power Supply",d:"Battery backup system providing emergency power to prevent data loss and downtime during outages.",c:"infra"},
+
+{a:"AH",f:"Authentication Header",d:"IPSec protocol that provides data integrity and authentication for IP packets but does not encrypt the payload.",c:"crypto"},
+  {a:"AI",f:"Artificial Intelligence",d:"Machine learning-based systems used in cybersecurity for threat detection anomaly analysis and automated response.",c:"infra"},
+  {a:"AP",f:"Access Point",d:"Wireless networking device that allows Wi-Fi devices to connect to a wired network.",c:"network"},
+  {a:"ATT&CK",f:"Adversarial Tactics Techniques and Common Knowledge",d:"The MITRE framework documenting real-world adversary behaviors — same concept as MITRE listed separately in official docs.",c:"threat"},
+  {a:"AV",f:"Antivirus",d:"Software that detects and removes malware by scanning files and processes for known malicious signatures.",c:"operations"},
+  {a:"BASH",f:"Bourne Again Shell",d:"Default Unix/Linux command-line shell commonly used in scripting automation and security tooling.",c:"operations"},
+  {a:"BIOS",f:"Basic Input/Output System",d:"Firmware initializing hardware during boot — a target for rootkits and firmware attacks.",c:"infra"},
+  {a:"BPA",f:"Business Partners Agreement",d:"Formal agreement between organizations defining security responsibilities when sharing data or systems.",c:"compliance"},
+  {a:"BPDU",f:"Bridge Protocol Data Unit",d:"Message used by spanning tree protocol to prevent loops — BPDU guard protects against rogue switches.",c:"network"},
+  {a:"CAPTCHA",f:"Completely Automated Public Turing Test to Tell Computers and Humans Apart",d:"Challenge-response test used to block automated bots from accessing web services.",c:"threat"},
+  {a:"CAR",f:"Corrective Action Report",d:"Formal document identifying a security problem and the steps taken to fix it.",c:"compliance"},
+  {a:"CBC",f:"Cipher Block Chaining",d:"Block cipher mode where each block of plaintext is XORed with the previous ciphertext block before encryption.",c:"crypto"},
+  {a:"CCMP",f:"Counter Mode/CBC-MAC Protocol",d:"Encryption protocol used in WPA2 based on AES — replaced the weaker TKIP.",c:"crypto"},
+  {a:"CCTV",f:"Closed-circuit Television",d:"Video surveillance system used as a physical security control to monitor and record activity.",c:"compliance"},
+  {a:"CFB",f:"Cipher Feedback",d:"Block cipher mode that converts a block cipher into a stream cipher for continuous encryption.",c:"crypto"},
+  {a:"CIA",f:"Confidentiality Integrity and Availability",d:"The three core principles of information security — the foundation of all security controls.",c:"compliance"},
+  {a:"CIO",f:"Chief Information Officer",d:"Executive responsible for an organization's IT strategy and infrastructure.",c:"compliance"},
+  {a:"CMS",f:"Content Management System",d:"Platform for creating and managing digital content — commonly targeted due to plugin vulnerabilities.",c:"threat"},
+  {a:"COOP",f:"Continuity of Operation Planning",d:"Government/organizational planning ensuring essential functions continue during emergencies.",c:"compliance"},
+  {a:"COPE",f:"Corporate Owned Personally Enabled",d:"Mobile device policy where the organization owns devices but allows personal use.",c:"compliance"},
+  {a:"CP",f:"Contingency Planning",d:"Process of preparing for unexpected disruptions to business operations.",c:"compliance"},
+  {a:"CRC",f:"Cyclical Redundancy Check",d:"Error-detecting code used to verify data integrity during transmission — not a security control.",c:"protocol"},
+  {a:"CSO",f:"Chief Security Officer",d:"Executive responsible for the physical and cybersecurity of an organization.",c:"compliance"},
+  {a:"CTM",f:"Counter Mode",d:"Block cipher mode that turns a block cipher into a stream cipher using an incrementing counter.",c:"crypto"},
+  {a:"CTO",f:"Chief Technology Officer",d:"Executive responsible for technology strategy and innovation within an organization.",c:"compliance"},
+  {a:"CYOD",f:"Choose Your Own Device",d:"Policy allowing employees to select from approved devices rather than using any personal device.",c:"compliance"},
+  {a:"DBA",f:"Database Administrator",d:"Person responsible for managing and securing databases — key role in data protection.",c:"compliance"},
+  {a:"DLL",f:"Dynamic Link Library",d:"Windows file containing reusable code — DLL injection is a common attack technique.",c:"threat"},
+  {a:"DNAT",f:"Destination Network Address Translation",d:"Rewrites the destination IP of inbound packets — used in port forwarding and load balancing.",c:"network"},
+  {a:"DPO",f:"Data Privacy Officer",d:"Role required under GDPR responsible for overseeing data protection strategy and compliance.",c:"compliance"},
+  {a:"DSL",f:"Digital Subscriber Line",d:"Broadband internet connection over telephone lines — relevant in network topology discussions.",c:"network"},
+  {a:"ECB",f:"Electronic Code Book",d:"Simplest block cipher mode that encrypts each block independently — considered insecure due to pattern leakage.",c:"crypto"},
+  {a:"EFS",f:"Encrypted File System",d:"Windows feature allowing individual files and folders to be encrypted using the user's credentials.",c:"crypto"},
+  {a:"ERP",f:"Enterprise Resource Planning",d:"Integrated business software managing core processes — a high-value attack target.",c:"infra"},
+  {a:"ESN",f:"Electronic Serial Number",d:"Unique identifier assigned to mobile devices — relevant in device tracking and authentication.",c:"identity"},
+  {a:"ESP",f:"Encapsulated Security Payload",d:"IPSec protocol that provides encryption confidentiality and optional authentication for IP packets.",c:"crypto"},
+  {a:"FACL",f:"File System Access Control List",d:"Extended ACL attached to individual files and directories controlling granular access permissions.",c:"identity"},
+  {a:"FDE",f:"Full Disk Encryption",d:"Encryption of an entire drive so data is unreadable without proper authentication.",c:"crypto"},
+  {a:"FRR",f:"False Rejection Rate",d:"Biometric metric measuring how often a legitimate user is incorrectly denied access.",c:"identity"},
+  {a:"FTPS",f:"Secured File Transfer Protocol",d:"FTP over SSL/TLS providing encrypted file transfers — different from SFTP which runs over SSH.",c:"protocol"},
+  {a:"GCM",f:"Galois Counter Mode",d:"Authenticated encryption mode combining counter mode encryption with authentication — used in AES-GCM.",c:"crypto"},
+  {a:"GPG",f:"Gnu Privacy Guard",d:"Free open-source implementation of PGP for encrypting and signing data and communications.",c:"crypto"},
+  {a:"GPO",f:"Group Policy Object",d:"Windows Active Directory feature for centrally managing security settings across systems.",c:"identity"},
+  {a:"GPS",f:"Global Positioning System",d:"Satellite navigation system — relevant in mobile security geofencing and location-based access controls.",c:"infra"},
+  {a:"GPU",f:"Graphics Processing Unit",d:"Processor used for parallel computation — commonly used in password cracking and cryptomining attacks.",c:"threat"},
+  {a:"HA",f:"High Availability",d:"System design ensuring continuous operation with minimal downtime through redundancy.",c:"infra"},
+  {a:"HDD",f:"Hard Disk Drive",d:"Traditional magnetic storage device — relevant in data destruction sanitization and forensics.",c:"infra"},
+  {a:"HTML",f:"Hypertext Markup Language",d:"Standard language for web pages — XSS attacks inject malicious scripts into HTML.",c:"threat"},
+  {a:"HVAC",f:"Heating Ventilation Air Conditioning",d:"Physical building systems — relevant to data center physical security and environmental controls.",c:"compliance"},
+  {a:"IaC",f:"Infrastructure as Code",d:"Managing and provisioning infrastructure through code — misconfigurations can create security gaps.",c:"infra"},
+  {a:"IDEA",f:"International Data Encryption Algorithm",d:"Symmetric-key block cipher — older algorithm largely replaced by AES.",c:"crypto"},
+  {a:"IDF",f:"Intermediate Distribution Frame",d:"Wiring rack connecting building cabling to the main distribution frame — physical security consideration.",c:"network"},
+  {a:"IEEE",f:"Institute of Electrical and Electronics Engineers",d:"Standards body responsible for protocols like 802.11 Wi-Fi and 802.1X port authentication.",c:"protocol"},
+  {a:"IKE",f:"Internet Key Exchange",d:"Protocol used to set up a security association in IPSec by negotiating keys and algorithms.",c:"crypto"},
+  {a:"IM",f:"Instant Messaging",d:"Real-time text communication — a vector for phishing malware delivery and data leakage.",c:"threat"},
+  {a:"IoC",f:"Indicators of Compromise",d:"Alternate capitalization of IOC used in official CompTIA docs — forensic evidence of a security breach.",c:"operations"},
+  {a:"IoT",f:"Internet of Things",d:"Alternate capitalization of IOT — network of physical devices with internet connectivity.",c:"infra"},
+  {a:"IR",f:"Incident Response",d:"Structured approach to handling and managing the aftermath of a security breach.",c:"operations"},
+  {a:"IRC",f:"Internet Relay Chat",d:"Real-time chat protocol — historically used as a command-and-control channel for botnets.",c:"threat"},
+  {a:"ISP",f:"Internet Service Provider",d:"Company providing internet access — relevant in upstream filtering DDoS mitigation and legal requests.",c:"network"},
+  {a:"ISSO",f:"Information Systems Security Officer",d:"Person responsible for the day-to-day security of a specific information system.",c:"compliance"},
+  {a:"IV",f:"Initialization Vector",d:"Random value used with a key to encrypt data ensuring identical plaintexts produce different ciphertext.",c:"crypto"},
+  {a:"KDC",f:"Key Distribution Center",d:"Component of Kerberos authentication that issues tickets for network service access.",c:"identity"},
+  {a:"KEK",f:"Key Encryption Key",d:"Key used to encrypt other keys — protects keys at rest in key management systems.",c:"crypto"},
+  {a:"LAN",f:"Local Area Network",d:"Network connecting devices within a limited area like a building or campus.",c:"network"},
+  {a:"LEAP",f:"Lightweight Extensible Authentication Protocol",d:"Cisco proprietary wireless auth protocol — considered weak and deprecated.",c:"protocol"},
+  {a:"MAN",f:"Metropolitan Area Network",d:"Network spanning a city or large campus — larger than LAN smaller than WAN.",c:"network"},
+  {a:"MBR",f:"Master Boot Record",d:"First sector of a storage device containing boot code — target for bootkits and destructive malware.",c:"threat"},
+  {a:"MDF",f:"Main Distribution Frame",d:"Central wiring hub in a facility where external lines connect to internal cabling.",c:"network"},
+  {a:"MFD",f:"Multifunction Device",d:"Office device combining printer scanner and fax — often overlooked attack surface on a network.",c:"infra"},
+  {a:"MFP",f:"Multifunction Printer",d:"Printer with built-in scanning copying and faxing — stores documents internally and needs hardening.",c:"infra"},
+  {a:"ML",f:"Machine Learning",d:"AI technique used in cybersecurity for anomaly detection behavioral analysis and threat classification.",c:"infra"},
+  {a:"MMS",f:"Multimedia Message Service",d:"Mobile messaging standard supporting images and video — a vector for mobile-based attacks.",c:"threat"},
+  {a:"MPLS",f:"Multi-protocol Label Switching",d:"High-performance routing technique directing data using short path labels — used in enterprise WANs.",c:"network"},
+  {a:"MSA",f:"Master Service Agreement",d:"Overarching contract between companies governing all future transactions and security responsibilities.",c:"compliance"},
+  {a:"MSCHAP",f:"Microsoft Challenge Handshake Authentication Protocol",d:"Microsoft's version of CHAP used in Windows and VPN authentication.",c:"identity"},
+  {a:"MaaS",f:"Monitoring as a Service",d:"Cloud-based monitoring solution for infrastructure applications and security events.",c:"infra"},
+  {a:"MTTF",f:"Mean Time to Failure",d:"Average time a non-repairable system or component operates before failing.",c:"compliance"},
+  {a:"MTU",f:"Maximum Transmission Unit",d:"Largest packet size a network can transmit — manipulated in some fragmentation-based attacks.",c:"network"},
+  {a:"NFC",f:"Near Field Communication",d:"Short-range wireless communication used in contactless payments and access cards — vulnerable to eavesdropping.",c:"network"},
+  {a:"NTFS",f:"New Technology File System",d:"Windows file system supporting permissions encryption and auditing via EFS and ACLs.",c:"infra"},
+  {a:"NTLM",f:"New Technology LAN Manager",d:"Older Microsoft authentication protocol — vulnerable to pass-the-hash and relay attacks.",c:"identity"},
+  {a:"OID",f:"Object Identifier",d:"Unique numeric identifier used in digital certificates and SNMP to identify objects.",c:"protocol"},
+  {a:"OS",f:"Operating System",d:"Software managing hardware and providing services — hardening the OS is a core security practice.",c:"infra"},
+  {a:"OT",f:"Operational Technology",d:"Hardware and software monitoring and controlling physical devices in industrial environments.",c:"infra"},
+  {a:"OTA",f:"Over the Air",d:"Wireless method of distributing firmware and software updates to mobile and IoT devices.",c:"infra"},
+  {a:"OVAL",f:"Open Vulnerability Assessment Language",d:"XML-based standard for describing system security states and assessment results.",c:"compliance"},
+  {a:"P12",f:"PKCS Number 12",d:"File format storing a private key and certificate chain — protected by a password.",c:"crypto"},
+  {a:"P2P",f:"Peer to Peer",d:"Decentralized network where devices communicate directly — used by some malware for C2 communications.",c:"threat"},
+  {a:"PAC",f:"Proxy Auto Configuration",d:"Script that tells a browser which proxy server to use — can be hijacked in WPAD attacks.",c:"network"},
+  {a:"PAP",f:"Password Authentication Protocol",d:"Simple authentication protocol sending passwords in plaintext — considered insecure.",c:"identity"},
+  {a:"PAT",f:"Port Address Translation",d:"Maps multiple private IPs to a single public IP using different ports — extends NAT.",c:"network"},
+  {a:"PBX",f:"Private Branch Exchange",d:"Internal telephone system — voice phishing and vishing attacks often target PBX systems.",c:"threat"},
+  {a:"PCI-DSS",f:"Payment Card Industry Data Security Standard",d:"Alternate hyphenated form of PCI DSS — same standard for protecting cardholder data.",c:"compliance"},
+  {a:"PDU",f:"Power Distribution Unit",d:"Device distributing electrical power in a data center — physical security and resilience consideration.",c:"infra"},
+  {a:"PED",f:"Personal Electronic Device",d:"Any portable electronic device — relevant in BYOD policies and physical security controls.",c:"compliance"},
+  {a:"PEM",f:"Privacy Enhanced Mail",d:"Base64-encoded certificate format commonly used for TLS certificates and private keys.",c:"crypto"},
+  {a:"PKCS",f:"Public Key Cryptography Standards",d:"Set of RSA Security standards defining formats for cryptographic keys certificates and messages.",c:"crypto"},
+  {a:"POP",f:"Post Office Protocol",d:"Protocol for retrieving email from a server — downloads messages and typically removes them from server.",c:"protocol"},
+  {a:"POTS",f:"Plain Old Telephone Service",d:"Traditional analog telephone network — relevant in legacy infrastructure and vishing attack context.",c:"network"},
+  {a:"PPP",f:"Point-to-Point Protocol",d:"Data link protocol for direct connections between two nodes — used in dial-up and some VPN tunnels.",c:"protocol"},
+  {a:"PPTP",f:"Point-to-Point Tunneling Protocol",d:"VPN protocol considered insecure due to weak encryption — largely replaced by L2TP/IPSec and OpenVPN.",c:"network"},
+  {a:"PSK",f:"Pre-shared Key",d:"Secret value shared between parties before communication — used in WPA2-Personal and IPSec.",c:"crypto"},
+  {a:"PTZ",f:"Pan-tilt-zoom",d:"Type of surveillance camera with remote directional and zoom control — used in physical security.",c:"compliance"},
+  {a:"PUP",f:"Potentially Unwanted Program",d:"Software installed without clear consent that may display ads track usage or degrade performance.",c:"threat"},
+  {a:"RA",f:"Registration Authority",d:"Entity that verifies identity before a CA issues a digital certificate.",c:"crypto"},
+  {a:"RACE",f:"Research and Development in Advanced Communications Technologies in Europe",d:"European research initiative that produced cryptographic algorithms like RIPEMD.",c:"crypto"},
+  {a:"RAD",f:"Rapid Application Development",d:"Software development methodology emphasizing speed — security must be integrated not bolted on.",c:"compliance"},
+  {a:"RAID",f:"Redundant Array of Inexpensive Disks",d:"Storage technology combining multiple drives for redundancy or performance — relevant in data availability.",c:"infra"},
+  {a:"RAS",f:"Remote Access Server",d:"Server enabling remote users to connect to an internal network — a key attack target.",c:"network"},
+  {a:"RFID",f:"Radio Frequency Identifier",d:"Wireless technology using electromagnetic fields to identify tags — used in access badges and asset tracking.",c:"identity"},
+  {a:"RIPEMD",f:"RACE Integrity Primitives Evaluation Message Digest",d:"Cryptographic hash function family developed in Europe — alternative to SHA.",c:"crypto"},
+  {a:"ROI",f:"Return on Investment",d:"Financial metric used to justify security spending by comparing cost to risk reduction benefit.",c:"compliance"},
+  {a:"RTBH",f:"Remotely Triggered Black Hole",d:"Network technique dropping traffic from specific sources to mitigate DDoS attacks at the routing level.",c:"network"},
+  {a:"RTP",f:"Real-time Transport Protocol",d:"Protocol for delivering audio and video over IP networks — used in VoIP and video conferencing.",c:"protocol"},
+  {a:"SAE",f:"Simultaneous Authentication of Equals",d:"Authentication protocol used in WPA3 replacing PSK — resistant to offline dictionary attacks.",c:"crypto"},
+  {a:"SAN",f:"Storage Area Network",d:"High-speed network providing block-level storage access — requires strong access controls.",c:"infra"},
+  {a:"SCEP",f:"Simple Certificate Enrollment Protocol",d:"Protocol for automating certificate enrollment for network devices.",c:"crypto"},
+  {a:"SDK",f:"Software Development Kit",d:"Collection of tools for building applications — insecure SDKs introduce vulnerabilities into software.",c:"operations"},
+  {a:"SDLM",f:"Software Development Lifecycle Methodology",d:"Structured approach to software development integrating security at every phase.",c:"compliance"},
+  {a:"SED",f:"Self-encrypting Drive",d:"Storage drive with built-in hardware encryption that automatically encrypts all stored data.",c:"crypto"},
+  {a:"SEH",f:"Structured Exception Handler",d:"Windows mechanism for handling errors — exploited in SEH-based buffer overflow attacks.",c:"threat"},
+  {a:"SELinux",f:"Security-enhanced Linux",d:"Linux kernel security module providing mandatory access controls — used to confine processes.",c:"infra"},
+  {a:"SHTTP",f:"Secure Hypertext Transfer Protocol",d:"Early alternative to HTTPS for securing web communications — largely obsolete.",c:"protocol"},
+  {a:"SIM",f:"Subscriber Identity Module",d:"Smart card in mobile devices storing identity credentials — target of SIM swapping attacks.",c:"identity"},
+  {a:"SMS",f:"Short Message Service",d:"Text messaging protocol — used as an MFA factor and a vector for smishing attacks.",c:"threat"},
+  {a:"SOAP",f:"Simple Object Access Protocol",d:"XML-based messaging protocol for web services — relevant in API security and XML injection.",c:"protocol"},
+  {a:"SOW",f:"Statement of Work",d:"Document defining specific work activities deliverables and timelines — includes security requirements.",c:"compliance"},
+  {a:"SPIM",f:"Spam over Internet Messaging",d:"Unsolicited bulk messages sent via instant messaging platforms — a social engineering vector.",c:"threat"},
+  {a:"SRTP",f:"Secure Real-Time Protocol",d:"Encrypted version of RTP providing confidentiality and authentication for VoIP and video.",c:"protocol"},
+  {a:"SSD",f:"Solid State Drive",d:"Flash-based storage device — secure deletion is more complex than with traditional HDDs.",c:"infra"},
+  {a:"TGT",f:"Ticket Granting Ticket",d:"Kerberos token issued after initial authentication used to request service tickets without re-entering credentials.",c:"identity"},
+  {a:"TKIP",f:"Temporal Key Integrity Protocol",d:"Encryption protocol used in WPA — considered weak and replaced by CCMP/AES in WPA2.",c:"crypto"},
+  {a:"TOC",f:"Time-of-check",d:"First part of a TOCTOU race condition — the moment a security check is performed.",c:"threat"},
+  {a:"TOU",f:"Time-of-use",d:"Second part of a TOCTOU race condition — the moment a resource is actually used after checking.",c:"threat"},
+  {a:"TSIG",f:"Transaction Signature",d:"DNS security mechanism using shared secret keys to authenticate DNS messages between servers.",c:"protocol"},
+  {a:"TTP",f:"Tactics Techniques and Procedures",d:"Singular form of TTPs — describes the behavior and methods of a specific threat actor.",c:"threat"},
+  {a:"UAV",f:"Unmanned Aerial Vehicle",d:"Drone — relevant in physical security as a surveillance or attack delivery platform.",c:"compliance"},
+  {a:"UEFI",f:"Unified Extensible Firmware Interface",d:"Modern replacement for BIOS — can be targeted by bootkits and firmware implants.",c:"infra"},
+  {a:"URI",f:"Uniform Resource Identifier",d:"String identifying a resource — broader than URL includes URNs and other resource identifiers.",c:"protocol"},
+  {a:"USB",f:"Universal Serial Bus",d:"Common connection interface — USB drops and HID attacks are well-known physical attack vectors.",c:"threat"},
+  {a:"UTP",f:"Unshielded Twisted Pair",d:"Common network cabling — physical access to UTP enables packet sniffing and wiretapping.",c:"network"},
+  {a:"VBA",f:"Visual Basic for Applications",d:"Microsoft scripting language embedded in Office documents — heavily abused in macro malware.",c:"threat"},
+  {a:"VDE",f:"Virtual Desktop Environment",d:"Isolated virtual desktop instance — similar to VDI used to contain user activity.",c:"infra"},
+  {a:"VM",f:"Virtual Machine",d:"Software emulation of a physical computer — VM escape attacks attempt to break out of the hypervisor.",c:"infra"},
+  {a:"VTC",f:"Video Teleconferencing",d:"Real-time video communication system — relevant in remote work security and eavesdropping risks.",c:"infra"},
+  {a:"VoIP",f:"Voice over IP",d:"Technology delivering voice calls over IP networks — vulnerable to eavesdropping and toll fraud.",c:"protocol"},
+  {a:"WAP",f:"Wireless Access Point",d:"Device connecting wireless clients to a wired network — rogue WAPs are a common attack tool.",c:"network"},
+  {a:"WEP",f:"Wired Equivalent Privacy",d:"Original Wi-Fi encryption standard — cryptographically broken and must never be used.",c:"crypto"},
+  {a:"WO",f:"Work Order",d:"Document authorizing and detailing specific IT or security work to be performed.",c:"compliance"},
+  {a:"WPA",f:"Wi-Fi Protected Access",d:"Wi-Fi security protocol replacing WEP — WPA2 and WPA3 are the current standards.",c:"crypto"},
+  {a:"WPS",f:"Wi-Fi Protected Setup",d:"Feature for easily connecting devices to Wi-Fi — vulnerable to brute-force PIN attacks.",c:"network"},
+  {a:"WTLS",f:"Wireless TLS",d:"TLS adapted for wireless devices with limited processing power — largely obsolete.",c:"crypto"},
+  {a:"XML",f:"Extensible Markup Language",d:"Flexible markup language used in web services and configs — vulnerable to XXE injection attacks.",c:"protocol"},
+  {a:"XOR",f:"Exclusive Or",d:"Fundamental binary operation used in many encryption algorithms and hash functions.",c:"crypto"},
+  {a:"XSRF",f:"Cross-site Request Forgery",d:"Alternate acronym for CSRF — same attack tricking authenticated users into submitting malicious requests.",c:"threat"},
+{a:"QUIC",f:"Quick UDP Internet Connections",d:"Modern transport protocol developed by Google using UDP — designed to reduce latency and is the basis of HTTP/3.",c:"protocol"},
+  {a:"WPA2",f:"Wi-Fi Protected Access 2",d:"Current mainstream Wi-Fi security standard using AES/CCMP encryption — replaced WPA.",c:"crypto"},
+  {a:"WPA3",f:"Wi-Fi Protected Access 3",d:"Latest Wi-Fi security standard using SAE instead of PSK — provides stronger protection against brute-force attacks.",c:"crypto"},
+  {a:"802.1X",f:"IEEE 802.1X Port-based Network Access Control",d:"Standard for port-based NAC — requires authentication before granting network access, used in enterprise Wi-Fi and wired networks.",c:"protocol"},
+  {a:"DoH",f:"DNS over HTTPS",d:"Protocol encrypting DNS queries inside HTTPS traffic to prevent eavesdropping and manipulation.",c:"protocol"},
+  {a:"DoT",f:"DNS over TLS",d:"Protocol encrypting DNS queries using TLS to protect DNS traffic from interception.",c:"protocol"},
+  {a:"DNSSEC",f:"Domain Name System Security Extensions",d:"Suite of extensions adding cryptographic signatures to DNS records to prevent spoofing and cache poisoning.",c:"protocol"},
+];
+
+const labelMap = {
+  network:"Network", threat:"Threat & Attack", crypto:"Crypto & Privacy",
+  compliance:"Compliance & GRC", protocol:"Protocols", identity:"Identity & Access",
+  operations:"Operations & IR", infra:"Infrastructure"
+};
+
+let currentCat = '';
+let currentView = 'grid';
+
+function setFilter(cat) {
+  currentCat = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.cat === cat);
+  });
+  render();
+}
+
+function setView(v) {
+  currentView = v;
+  const grid = document.getElementById('grid');
+  grid.classList.toggle('list-view', v === 'list');
+  document.getElementById('grid-btn').classList.toggle('active', v === 'grid');
+  document.getElementById('list-btn').classList.toggle('active', v === 'list');
+}
+
+function render() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const filtered = data.filter(x => {
+    const mq = !q || x.a.toLowerCase().includes(q) || x.f.toLowerCase().includes(q) || x.d.toLowerCase().includes(q);
+    const mc = !currentCat || x.c === currentCat;
+    return mq && mc;
+  });
+
+  document.getElementById('stats').innerHTML =
+    `Showing <span>${filtered.length}</span> of <span>${data.length}</span> acronyms`;
+
+  const grid = document.getElementById('grid');
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="no-results">No results for "<span>${document.getElementById('search').value}</span>"</div>`;
+    return;
+  }
+
+  if (currentView === 'list') {
+    grid.innerHTML = filtered.map((x, i) => `
+      <div class="card" data-cat="${x.c}" style="animation-delay:${Math.min(i*0.02,0.4)}s">
+        <div class="card-left">
+          <div class="card-header">
+            <span class="acronym-text">${x.a}</span>
+          </div>
+          <span class="badge">${labelMap[x.c]}</span>
+        </div>
+        <div class="card-right">
+          <div class="full-name">${x.f}</div>
+          <div class="definition">${x.d}</div>
+        </div>
+      </div>
+    `).join('');
+  } else {
+    grid.innerHTML = filtered.map((x, i) => `
+      <div class="card" data-cat="${x.c}" style="animation-delay:${Math.min(i*0.02,0.4)}s">
+        <div class="card-header">
+          <span class="acronym-text">${x.a}</span>
+          <span class="badge">${labelMap[x.c]}</span>
+        </div>
+        <div class="full-name">${x.f}</div>
+        <div class="definition">${x.d}</div>
+      </div>
+    `).join('');
+  }
+}
+
+render();
+</script>
+</body>
+</html>
