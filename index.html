@@ -1040,6 +1040,9 @@ function initFromHash() {
   if (!hash) return;
   const match = data.find(x => x.a.toLowerCase() === hash.toLowerCase());
   if (!match) return;
+  // Deep link always overrides saved filter so the card is always visible
+  currentCat = '';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === ''));
   document.getElementById('search').value = match.a;
   render();
   setTimeout(() => {
