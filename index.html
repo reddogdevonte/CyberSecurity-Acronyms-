@@ -11,6 +11,7 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Cybersecurity Acronyms Reference" />
 <meta name="twitter:description" content="Every acronym you need to know — searchable, filterable, shareable." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>" />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -355,7 +356,29 @@
     transition: all 0.15s;
     flex-shrink: 0;
     font-family: 'IBM Plex Mono', monospace;
+    position: relative;
   }
+
+  .copy-btn::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 7px);
+    right: 0;
+    background: var(--surface2);
+    color: var(--text);
+    font-size: 11px;
+    padding: 5px 9px;
+    border-radius: 4px;
+    border: 1px solid var(--border2);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 10;
+  }
+
+  .copy-btn:hover::after { opacity: 1; }
+  .copy-btn.copied::after { opacity: 1; }
 
   .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
   .copy-btn.copied { opacity: 1; color: var(--accent); border-color: var(--accent); }
@@ -856,15 +879,38 @@ function setView(v) {
   document.getElementById('list-btn').classList.toggle('active', v === 'list');
 }
 
-function copyCard(acronym, fullName, definition, btnId) {
-  const text = acronym + ' — ' + fullName + ': ' + definition;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.getElementById(btnId);
-    if (!btn) return;
+function escAttr(s) {
+  return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function copyCard(btn) {
+  const text = btn.dataset.a + ' — ' + btn.dataset.f + ': ' + btn.dataset.d;
+  function onSuccess() {
     btn.textContent = '✓';
+    btn.dataset.tip = 'Copied!';
     btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = '⎘'; btn.classList.remove('copied'); }, 1400);
-  });
+    setTimeout(() => {
+      btn.textContent = '⎘';
+      btn.dataset.tip = 'Copy definition';
+      btn.classList.remove('copied');
+    }, 1400);
+  }
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(onSuccess).catch(() => fallbackCopy(text, onSuccess));
+  } else {
+    fallbackCopy(text, onSuccess);
+  }
+}
+
+function fallbackCopy(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try { document.execCommand('copy'); cb(); } catch(e) {}
+  document.body.removeChild(ta);
 }
 
 function setHash(acronym) {
@@ -926,8 +972,7 @@ function render() {
 
   const makeCard = (x, i, listView) => {
     const id = anchorId(x.a);
-    const copyId = 'copy-' + id;
-    const copyBtn = '<button class="copy-btn" id="' + copyId + '" title="Copy to clipboard" onclick="event.stopPropagation();copyCard(' + JSON.stringify(x.a) + ',' + JSON.stringify(x.f) + ',' + JSON.stringify(x.d) + ',\'' + copyId + '\')">⎘</button>';
+    const copyBtn = '<button class="copy-btn" data-a="' + escAttr(x.a) + '" data-f="' + escAttr(x.f) + '" data-d="' + escAttr(x.d) + '" data-tip="Copy definition" onclick="event.stopPropagation();copyCard(this)">⎘</button>';
     if (listView) {
       return '<div class="card" id="' + id + '" data-cat="' + x.c + '" style="animation-delay:' + Math.min(i*0.02,0.4) + 's">' +
         '<div class="card-left">' +
