@@ -23,7 +23,7 @@
     --border: rgba(255,255,255,0.07);
     --border2: rgba(255,255,255,0.13);
     --text: #e8edf4;
-    --muted: #6b7a90;
+    --muted: #7d8fa8;
     --accent: #00e5a0;
     --accent2: #0099ff;
     --network: #0099ff;
@@ -383,8 +383,22 @@
   .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
   .copy-btn.copied { opacity: 1; color: var(--accent); border-color: var(--accent); }
 
+  .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+
+  .filter-btn:focus-visible,
+  .view-btn:focus-visible,
+  .az-btn:focus-visible,
+  .copy-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
   .full-name {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--muted);
     margin-bottom: 7px;
     font-weight: 300;
@@ -469,7 +483,8 @@
   <div class="controls">
     <div class="search-wrap">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="search" placeholder="Search acronyms, names, definitions..." oninput="render()" />
+      <label for="search" class="sr-only">Search acronyms</label>
+      <input type="text" id="search" placeholder="Search acronyms, names, definitions… (press / to focus)" oninput="render();saveState()" />
     </div>
     <div class="filters" id="filters">
       <button class="filter-btn active" data-cat="" data-label="All" onclick="setFilter('')">All</button>
@@ -491,8 +506,8 @@
   <div class="stats-bar">
     <div class="stats-count" id="stats"></div>
     <div class="view-toggle">
-      <button class="view-btn active" id="grid-btn" onclick="setView('grid')" title="Grid view">⊞</button>
-      <button class="view-btn" id="list-btn" onclick="setView('list')" title="List view">☰</button>
+      <button class="view-btn active" id="grid-btn" onclick="setView('grid')" title="Grid view" aria-label="Grid view">⊞</button>
+      <button class="view-btn" id="list-btn" onclick="setView('list')" title="List view" aria-label="List view">☰</button>
     </div>
   </div>
   <div class="grid" id="grid"></div>
@@ -516,7 +531,7 @@ const data = [
   {a:"CVE",f:"Common Vulnerabilities and Exposures",d:"Publicly disclosed cybersecurity vulnerabilities assigned a unique identifier.",c:"threat"},
   {a:"CVSS",f:"Common Vulnerability Scoring System",d:"Standardized framework for rating the severity of security vulnerabilities on a 0–10 scale.",c:"threat"},
   {a:"DDoS",f:"Distributed Denial of Service",d:"Attack that floods a target with traffic from many sources, making it unavailable.",c:"threat"},
-  {a:"DEP",f:"Data Execution Prevention",d:"Security feature that prevents code from running in memory regions marked as non-executable.",c:"infra"},
+  {a:"DEP",f:"Data Execution Prevention",d:"Security feature that prevents code from running in memory regions marked as non-executable.",c:"threat"},
   {a:"DFIR",f:"Digital Forensics and Incident Response",d:"Combined discipline of investigating cyber incidents and collecting digital evidence.",c:"operations"},
   {a:"DLP",f:"Data Loss Prevention",d:"Tools and policies that detect and prevent unauthorized transmission of sensitive data.",c:"compliance"},
   {a:"DMZ",f:"Demilitarized Zone",d:"Network segment that separates internal systems from the public internet, hosting externally accessible services.",c:"network"},
@@ -863,12 +878,26 @@ function anchorId(a) {
   return 'card-' + a.replace(/[^a-zA-Z0-9]/g, '_');
 }
 
+function saveState() {
+  const q = document.getElementById('search').value;
+  try {
+    localStorage.setItem('cybercat', currentCat);
+    localStorage.setItem('cyberview', currentView);
+  } catch(e) {}
+  const params = new URLSearchParams();
+  if (currentCat) params.set('cat', currentCat);
+  if (q) params.set('q', q);
+  const qs = params.toString();
+  history.replaceState(null, '', (qs ? '?' + qs : window.location.pathname) + window.location.hash);
+}
+
 function setFilter(cat) {
   currentCat = cat;
   document.querySelectorAll('.filter-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.cat === cat);
   });
   render();
+  saveState();
 }
 
 function setView(v) {
@@ -877,6 +906,7 @@ function setView(v) {
   grid.classList.toggle('list-view', v === 'list');
   document.getElementById('grid-btn').classList.toggle('active', v === 'grid');
   document.getElementById('list-btn').classList.toggle('active', v === 'list');
+  try { localStorage.setItem('cyberview', v); } catch(e) {}
 }
 
 function escAttr(s) {
@@ -966,7 +996,8 @@ function render() {
   const grid = document.getElementById('grid');
 
   if (!filtered.length) {
-    grid.innerHTML = '<div class="no-results">No results for "<span>' + document.getElementById('search').value + '</span>"</div>';
+    const safeQ = document.getElementById('search').value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    grid.innerHTML = '<div class="no-results">No results for "<span>' + safeQ + '</span>"</div>';
     return;
   }
 
@@ -1024,6 +1055,41 @@ function initFromHash() {
 document.getElementById('total-count').textContent = data.length;
 document.getElementById('footer').textContent =
   'CYBERSECURITY ACRONYM REFERENCE  ·  ' + data.length + ' TERMS';
+// Sort alphabetically
+data.sort((a, b) => a.a.localeCompare(b.a, undefined, {sensitivity: 'base'}));
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  const search = document.getElementById('search');
+  if (e.key === '/' && document.activeElement !== search) {
+    e.preventDefault();
+    search.focus();
+    search.select();
+  }
+  if (e.key === 'Escape') {
+    if (search.value) { search.value = ''; render(); saveState(); }
+    else search.blur();
+  }
+});
+
+// Restore state: URL params take priority, localStorage as fallback
+(function restoreState() {
+  const params = new URLSearchParams(window.location.search);
+  const urlCat = params.get('cat') || '';
+  const urlQ   = params.get('q')   || '';
+  let storedView = 'grid';
+  try { storedView = localStorage.getItem('cyberview') || 'grid'; } catch(e) {}
+
+  if (urlQ) document.getElementById('search').value = urlQ;
+
+  const cat = urlCat || (() => { try { return localStorage.getItem('cybercat') || ''; } catch(e) { return ''; } })();
+  if (cat) {
+    currentCat = cat;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+  }
+  if (storedView === 'list') setView('list');
+})();
+
 render();
 initFromHash();
 </script>
