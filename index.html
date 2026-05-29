@@ -252,8 +252,9 @@
     cursor: default;
     transition: border-color 0.2s, transform 0.15s;
     position: relative;
-    overflow: hidden;
     animation: fadeIn 0.3s ease both;
+    /* no overflow:hidden — lets the copy tooltip escape the card boundary */
+    z-index: 1;
   }
 
   .card::before {
@@ -261,11 +262,12 @@
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
+    border-radius: 8px 8px 0 0;
     opacity: 0;
     transition: opacity 0.2s;
   }
 
-  .card:hover { border-color: var(--border2); transform: translateY(-1px); }
+  .card:hover { border-color: var(--border2); transform: translateY(-1px); z-index: 10; }
   .card:hover::before { opacity: 1; }
   .card:hover .copy-btn { opacity: 1; }
 
@@ -414,23 +416,33 @@
 
   /* LIST VIEW card tweaks */
   .list-view .card {
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: 0 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px;
     padding: 14px 18px;
-    align-items: start;
   }
 
-  .list-view .card-left {
+  .list-view .list-left {
     display: flex;
     flex-direction: column;
     gap: 6px;
+    width: 120px;
+    flex-shrink: 0;
   }
 
-  .list-view .card-right { }
+  .list-view .list-body {
+    flex: 1;
+    min-width: 0;
+  }
 
-  .list-view .card-header { margin-bottom: 0; }
-  .list-view .full-name { margin-bottom: 4px; }
+  .list-view .list-body .full-name { margin-bottom: 5px; }
+
+  .list-view .copy-btn {
+    flex-shrink: 0;
+    opacity: 1;
+    margin-top: 2px;
+  }
 
   .no-results {
     grid-column: 1/-1;
@@ -463,8 +475,9 @@
   @media (max-width: 600px) {
     header, main { padding-left: 1rem; padding-right: 1rem; }
     h1 { font-size: 1.6rem; }
-    .list-view .card { grid-template-columns: 1fr; }
-    .list-view .card-left { flex-direction: row; align-items: center; flex-wrap: wrap; }
+    .list-view .card { flex-wrap: wrap; }
+    .list-view .list-left { flex-direction: row; align-items: center; width: auto; flex-wrap: wrap; gap: 8px; }
+    .list-view .list-body { width: 100%; flex: none; }
     .filters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
     .filters::-webkit-scrollbar { height: 3px; }
     .filters::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
@@ -1006,13 +1019,11 @@ function render() {
     const copyBtn = '<button class="copy-btn" data-a="' + escAttr(x.a) + '" data-f="' + escAttr(x.f) + '" data-d="' + escAttr(x.d) + '" data-tip="Copy definition" onclick="event.stopPropagation();copyCard(this)">⎘</button>';
     if (listView) {
       return '<div class="card" id="' + id + '" data-cat="' + x.c + '" style="animation-delay:' + Math.min(i*0.02,0.4) + 's">' +
-        '<div class="card-left">' +
-          '<div class="card-header">' +
-            '<span class="acronym-text" onclick="setHash(\'' + x.a.replace(/'/g,"\\'") + '\')" title="Copy link">' + x.a + '</span>' +
-          '</div>' +
+        '<div class="list-left">' +
+          '<span class="acronym-text" onclick="setHash(\'' + x.a.replace(/'/g,"\\'") + '\')" title="Copy link">' + x.a + '</span>' +
           '<span class="badge">' + labelMap[x.c] + '</span>' +
         '</div>' +
-        '<div class="card-right">' +
+        '<div class="list-body">' +
           '<div class="full-name">' + x.f + '</div>' +
           '<div class="definition">' + x.d + '</div>' +
         '</div>' +
