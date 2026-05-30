@@ -611,6 +611,29 @@
   }
   .hidden { display: none !important; }
 
+  /* ── Legacy / historical marker ── */
+  .legacy-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    background: rgba(245,158,11,0.12);
+    color: #f59e0b;
+    border: 1px solid rgba(245,158,11,0.3);
+  }
+  .legacy-note {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 11px;
+    color: #d6b272;
+    font-weight: 300;
+  }
+  .legacy-note .ctx-label { color: #f59e0b; }
+
   /* LIST VIEW card tweaks */
   .list-view .card {
     display: flex;
@@ -1012,8 +1035,9 @@
     }
     .full-name { color: #000 !important; font-weight: 600; }
     .definition { color: #222 !important; }
-    .why, .example { color: #222 !important; }
+    .why, .example, .legacy-note { color: #222 !important; }
     .ctx-label { color: #000 !important; opacity: 1; }
+    .legacy-tag { background: #eee !important; color: #333 !important; border: 1px solid #ccc; }
     footer { color: #000 !important; border-color: #ccc; }
   }
 </style>
@@ -1084,7 +1108,7 @@ const data = [
   {a:"APT",f:"Advanced Persistent Threat",d:"Sophisticated, long-term cyberattack by well-resourced adversaries targeting specific organizations.",c:"threat",why:"A well-resourced, patient adversary (often nation-state) that targets specific organizations for long-term access.",ex:"A state-sponsored group quietly maintaining access to a defense contractor for months.",domains:["ti", "soc"]},
   {a:"ARP",f:"Address Resolution Protocol",d:"Maps IP addresses to physical MAC addresses on a local network.",c:"protocol"},
   {a:"BYOD",f:"Bring Your Own Device",d:"Policy allowing employees to use personal devices for work, introducing unique security challenges.",c:"compliance"},
-  {a:"CA",f:"Certificate Authority",d:"Trusted entity that issues digital certificates verifying the identity of websites and organizations.",c:"crypto"},
+  {a:"CA",f:"Certificate Authority",d:"Trusted entity that issues digital certificates verifying the identity of websites and organizations.",c:"crypto",why:"Issues digital certificates and vouches for them, so your browser can trust a site is genuine.",ex:"DigiCert and Let's Encrypt are well-known CAs.",domains:["secplus"]},
   {a:"CASB",f:"Cloud Access Security Broker",d:"Security policy enforcement point between cloud users and cloud services.",c:"infra",why:"A control point between users and cloud apps — giving visibility and policy enforcement over SaaS usage.",ex:"Detecting and blocking uploads of confidential files to an unsanctioned personal Dropbox.",domains:["cloud"],tools:["Netskope", "Microsoft Defender for Cloud Apps", "Zscaler"]},
   {a:"CICD",f:"Continuous Integration / Continuous Deployment",d:"DevOps practice of automating build, test, and deployment pipelines.",c:"operations"},
   {a:"CISO",f:"Chief Information Security Officer",d:"Senior executive responsible for an organization's information and data security strategy.",c:"compliance",why:"The executive who owns security strategy and answers to the board — the career north-star for many in the field.",ex:"The CISO presenting the quarterly risk posture and budget asks to the board.",domains:["grc"],roles:["CISO", "Security Director"]},
@@ -1107,7 +1131,7 @@ const data = [
   {a:"GRC",f:"Governance, Risk, and Compliance",d:"Integrated approach to managing an organization's governance, risk management, and regulatory compliance.",c:"compliance",why:"Aligns security with business risk and regulation — the governance layer that turns controls into accountability.",ex:"Mapping controls to ISO 27001 and tracking risk acceptance sign-offs in one register.",domains:["grc", "compliance"],roles:["GRC Analyst", "Risk Analyst", "Compliance Manager"],tools:["RSA Archer", "ServiceNow GRC", "Vanta"]},
   {a:"HIPAA",f:"Health Insurance Portability and Accountability Act",d:"US law protecting sensitive patient health information from disclosure without consent.",c:"compliance",why:"US law protecting patient health data — non-compliance carries heavy fines and is a core driver of healthcare security.",ex:"Encrypting and access-logging electronic health records to meet the HIPAA Security Rule.",domains:["compliance", "grc"]},
   {a:"HIDS",f:"Host-based Intrusion Detection System",d:"Monitors a single host for suspicious activity and policy violations.",c:"operations"},
-  {a:"HSM",f:"Hardware Security Module",d:"Physical device that manages and safeguards digital keys for strong authentication.",c:"crypto"},
+  {a:"HSM",f:"Hardware Security Module",d:"Physical device that manages and safeguards digital keys for strong authentication.",c:"crypto",why:"Tamper-resistant hardware that generates and stores keys so they never sit in plain memory.",ex:"Banks use HSMs to protect the keys that sign transactions.",domains:["secplus"]},
   {a:"HTTP",f:"Hypertext Transfer Protocol",d:"Foundation of data communication on the web — unencrypted by default.",c:"protocol"},
   {a:"HTTPS",f:"HTTP Secure",d:"HTTP over TLS/SSL, encrypting data in transit between client and server.",c:"protocol"},
   {a:"IAM",f:"Identity and Access Management",d:"Framework for managing digital identities and controlling resource access.",c:"identity",why:"Controls who can access which systems and data — the foundation of nearly every security program and audit.",ex:"Okta, Microsoft Entra ID, and Ping Identity are common IAM platforms.",domains:["iam", "secplus"],roles:["IAM Analyst", "Identity Engineer", "Access Administrator"],tools:["Okta", "Microsoft Entra ID", "SailPoint"]},
@@ -1116,10 +1140,10 @@ const data = [
   {a:"IOC",f:"Indicator of Compromise",d:"Evidence on a network or system suggesting a security breach has occurred.",c:"threat",why:"Concrete evidence of a breach — hashes, IPs, domains — that defenders hunt for and share to catch the same attacker elsewhere.",ex:"Blocking a known-malicious file hash and C2 domain pulled from a threat-intel feed.",domains:["soc", "ti", "secplus"]},
   {a:"IOT",f:"Internet of Things",d:"Network of physical devices embedded with sensors and software that connect to the internet.",c:"infra"},
   {a:"IP",f:"Internet Protocol",d:"Principal communications protocol for routing data packets across networks.",c:"protocol"},
-  {a:"IPSec",f:"Internet Protocol Security",d:"Suite of protocols that encrypts and authenticates IP communications.",c:"crypto"},
+  {a:"IPSec",f:"Internet Protocol Security",d:"Suite of protocols that encrypts and authenticates IP communications.",c:"crypto",why:"Encrypts and authenticates IP traffic, the basis for most site-to-site VPNs.",ex:"Two offices linked over the internet by an IPSec tunnel.",domains:["net", "secplus"]},
   {a:"ISO",f:"International Organization for Standardization",d:"Body that develops international standards including ISO 27001 for information security.",c:"compliance",why:"Sets the international standard (ISO 27001) for information security management that customers and auditors look for.",ex:"Achieving ISO 27001 certification to win enterprise customers who require it.",domains:["grc", "compliance"]},
   {a:"LDAP",f:"Lightweight Directory Access Protocol",d:"Protocol for accessing and maintaining distributed directory information services.",c:"protocol"},
-  {a:"LUKS",f:"Linux Unified Key Setup",d:"Standard disk encryption specification for Linux.",c:"crypto"},
+  {a:"LUKS",f:"Linux Unified Key Setup",d:"Standard disk encryption specification for Linux.",c:"crypto",why:"The standard for encrypting Linux disks, so a lost drive stays unreadable.",ex:"Turning on LUKS during an Ubuntu install.",domains:["secplus"]},
   {a:"MAC",f:"Mandatory Access Control",d:"Access control policy where the OS enforces permissions based on classification labels.",c:"identity"},
   {a:"MFA",f:"Multi-Factor Authentication",d:"Authentication requiring two or more verification factors: something you know, have, or are.",c:"identity",why:"The single most effective control against credential theft — a stolen password alone is no longer enough.",ex:"Approving a push notification or entering a TOTP code after typing your password.",domains:["iam", "secplus"]},
   {a:"MSP",f:"Managed Service Provider",d:"Third-party company that remotely manages a customer's IT infrastructure and systems.",c:"infra"},
@@ -1135,7 +1159,7 @@ const data = [
   {a:"OWASP",f:"Open Web Application Security Project",d:"Nonprofit providing free resources on web application security, including the famous Top 10 list.",c:"compliance"},
   {a:"PAM",f:"Privileged Access Management",d:"Tools and processes for securing, managing, and monitoring privileged accounts.",c:"identity",why:"Secures the most dangerous accounts — admins and service accounts — that attackers prize most.",ex:"CyberArk vaulting a domain-admin password and rotating it after each checkout.",domains:["iam"],roles:["IAM Engineer", "PAM Administrator"],tools:["CyberArk", "BeyondTrust", "Delinea"]},
   {a:"PCI DSS",f:"Payment Card Industry Data Security Standard",d:"Security standards for organizations handling credit card data.",c:"compliance",why:"The mandatory standard for anyone handling card data — failing it can cut off a business's ability to take payments.",ex:"Segmenting and encrypting the network zone where credit-card numbers are processed.",domains:["compliance", "grc"]},
-  {a:"PGP",f:"Pretty Good Privacy",d:"Encryption program providing cryptographic privacy and authentication for data communications.",c:"crypto"},
+  {a:"PGP",f:"Pretty Good Privacy",d:"Encryption program providing cryptographic privacy and authentication for data communications.",c:"crypto",why:"Brought public-key encryption to everyday email and files.",ex:"Encrypting a message so only the recipient's private key can open it.",domains:["secplus"]},
   {a:"PHI",f:"Protected Health Information",d:"Individually identifiable health information protected under HIPAA.",c:"compliance"},
   {a:"PII",f:"Personally Identifiable Information",d:"Data that could be used to identify a specific individual, such as SSN, email, or biometrics.",c:"compliance"},
   {a:"PKI",f:"Public Key Infrastructure",d:"System of roles, policies, and procedures for creating, managing, and distributing digital certificates.",c:"crypto",why:"The system of keys, certificates, and authorities that makes encryption and digital identity trustworthy at scale.",ex:"A Certificate Authority issuing the TLS certificate that proves a website is who it claims to be.",domains:["secplus"],roles:["PKI Engineer", "Security Engineer"]},
@@ -1157,7 +1181,7 @@ const data = [
   {a:"SPF",f:"Sender Policy Framework",d:"Email authentication method specifying which mail servers can send on behalf of a domain.",c:"protocol"},
   {a:"SQL",f:"Structured Query Language",d:"Language for managing databases — SQL injection is one of the most common web vulnerabilities.",c:"threat"},
   {a:"SSH",f:"Secure Shell",d:"Cryptographic protocol for secure remote login and command execution over an unsecured network.",c:"protocol"},
-  {a:"SSL",f:"Secure Sockets Layer",d:"Predecessor to TLS — deprecated but the term is still commonly used to mean TLS.",c:"crypto"},
+  {a:"SSL",f:"Secure Sockets Layer",d:"Predecessor to TLS — deprecated but the term is still commonly used to mean TLS.",c:"crypto",legacy:"Replaced by TLS. Every SSL version is deprecated and unsafe; people say 'SSL' but usually mean TLS.",domains:["net", "secplus"]},
   {a:"SSO",f:"Single Sign-On",d:"Authentication scheme allowing users to log in once and access multiple applications.",c:"identity",why:"Lets users authenticate once and reach many apps — improving security (fewer passwords) and user experience at once.",ex:"Logging into Gmail, Slack, and Zoom through one corporate Okta or Entra ID login.",domains:["iam", "secplus"],roles:["Identity Engineer", "IAM Analyst"],tools:["Okta", "Microsoft Entra ID", "Ping Identity"]},
   {a:"STIG",f:"Security Technical Implementation Guide",d:"DISA configuration standards for securing DoD IT systems.",c:"compliance"},
   {a:"SWG",f:"Secure Web Gateway",d:"Security solution that filters internet traffic to enforce acceptable use and protect against threats.",c:"network"},
@@ -1175,27 +1199,27 @@ const data = [
   {a:"XSS",f:"Cross-Site Scripting",d:"Injection attack where malicious scripts are embedded into trusted web pages viewed by other users.",c:"threat"},
   {a:"ZTNA",f:"Zero Trust Network Access",d:"Security model requiring strict identity verification for every user and device, regardless of location.",c:"network",why:"Replaces the implicit trust of a VPN with per-request verification — 'never trust, always verify' for remote access.",ex:"Zscaler or Cloudflare Access granting a contractor one specific app, not the whole network.",domains:["net", "cloud", "secplus"],tools:["Zscaler", "Cloudflare Access", "Netskope"]},
   {a:"ZAP",f:"Zed Attack Proxy",d:"OWASP open-source tool for finding security vulnerabilities in web applications.",c:"threat"},
-  {a:"RSA",f:"Rivest-Shamir-Adleman",d:"Widely used public-key encryption algorithm for securing data transmission and digital signatures.",c:"crypto"},
-  {a:"DSA",f:"Digital Signature Algorithm",d:"NIST standard algorithm for generating and verifying digital signatures.",c:"crypto"},
-  {a:"ECDSA",f:"Elliptic Curve Digital Signature Algorithm",d:"Variant of DSA using elliptic curve cryptography — smaller key sizes with equivalent strength.",c:"crypto"},
-  {a:"ECDH",f:"Elliptic Curve Diffie-Hellman",d:"Key exchange protocol using elliptic curve math to establish a shared secret over a public channel.",c:"crypto"},
-  {a:"DH",f:"Diffie-Hellman",d:"Original key exchange protocol allowing two parties to establish a shared secret without prior contact.",c:"crypto"},
-  {a:"SHA",f:"Secure Hash Algorithm",d:"Family of cryptographic hash functions (SHA-1, SHA-256, SHA-512) used for data integrity and digital signatures.",c:"crypto"},
-  {a:"AES-256",f:"Advanced Encryption Standard 256-bit",d:"AES using a 256-bit key — the strongest AES variant, used where maximum encryption strength is required.",c:"crypto"},
-  {a:"ECC",f:"Elliptic Curve Cryptography",d:"Public-key cryptography using elliptic curves — smaller keys and faster performance than RSA.",c:"crypto"},
-  {a:"ECDHE",f:"Elliptic Curve Diffie-Hellman Ephemeral",d:"Key exchange using elliptic curves with ephemeral keys, providing perfect forward secrecy.",c:"crypto"},
-  {a:"DHE",f:"Diffie-Hellman Ephemeral",d:"Diffie-Hellman key exchange using temporary keys — enables perfect forward secrecy.",c:"crypto"},
-  {a:"PFS",f:"Perfect Forward Secrecy",d:"Cryptographic property ensuring session keys are not compromised even if long-term keys are later exposed.",c:"crypto"},
-  {a:"HMAC",f:"Hashed Message Authentication Code",d:"Uses a cryptographic hash and secret key to verify data integrity and authenticity.",c:"crypto"},
-  {a:"CRL",f:"Certificate Revocation List",d:"List published by a CA of certificates that have been revoked before their expiration date.",c:"crypto"},
-  {a:"OCSP",f:"Online Certificate Status Protocol",d:"Real-time protocol for checking whether a digital certificate has been revoked.",c:"crypto"},
-  {a:"CSR",f:"Certificate Signing Request",d:"Encoded message sent to a CA to apply for a digital certificate, containing the public key and identity info.",c:"crypto"},
-  {a:"TPM",f:"Trusted Platform Module",d:"Dedicated microcontroller on a motherboard that stores cryptographic keys and enables hardware-based security.",c:"crypto"},
-  {a:"DES",f:"Data Encryption Standard",d:"Older symmetric-key encryption algorithm — considered insecure today, replaced by AES.",c:"crypto"},
-  {a:"RC4",f:"Rivest Cipher 4",d:"Stream cipher once widely used in SSL/WEP — now considered cryptographically broken.",c:"crypto"},
-  {a:"MD5",f:"Message Digest 5",d:"Widely used hash function producing a 128-bit hash — considered broken for security purposes.",c:"crypto"},
-  {a:"PBKDF2",f:"Password-based Key Derivation Function 2",d:"Applies a pseudorandom function to a password with a salt to produce a derived key, slowing brute-force attacks.",c:"crypto"},
-  {a:"S/MIME",f:"Secure/Multipurpose Internet Mail Extensions",d:"Standard for public-key encryption and signing of email messages.",c:"crypto"},
+  {a:"RSA",f:"Rivest-Shamir-Adleman",d:"Widely used public-key encryption algorithm for securing data transmission and digital signatures.",c:"crypto",why:"The classic public-key algorithm for both encryption and digital signatures.",ex:"An RSA key signing a software release so users can verify it.",domains:["secplus"]},
+  {a:"DSA",f:"Digital Signature Algorithm",d:"NIST standard algorithm for generating and verifying digital signatures.",c:"crypto",why:"A public-key algorithm built only for digital signatures, not encryption.",ex:"Signing a file to prove who sent it.",domains:["secplus"]},
+  {a:"ECDSA",f:"Elliptic Curve Digital Signature Algorithm",d:"Variant of DSA using elliptic curve cryptography — smaller key sizes with equivalent strength.",c:"crypto",why:"Elliptic-curve signatures that match RSA's strength with much smaller keys.",ex:"256-bit ECDSA certificates securing modern HTTPS.",domains:["secplus"]},
+  {a:"ECDH",f:"Elliptic Curve Diffie-Hellman",d:"Key exchange protocol using elliptic curve math to establish a shared secret over a public channel.",c:"crypto",why:"Elliptic-curve key exchange: two parties agree on a shared secret over an open line.",domains:["secplus"]},
+  {a:"DH",f:"Diffie-Hellman",d:"Original key exchange protocol allowing two parties to establish a shared secret without prior contact.",c:"crypto",why:"The original way two parties derive a shared secret without sending it. Modern setups prefer the ephemeral elliptic-curve version.",domains:["secplus"]},
+  {a:"SHA",f:"Secure Hash Algorithm",d:"Family of cryptographic hash functions (SHA-1, SHA-256, SHA-512) used for data integrity and digital signatures.",c:"crypto",why:"The standard hash family for integrity and signatures. SHA-2 and SHA-3 are current; SHA-1 is retired.",ex:"Checking a download's SHA-256 against the published value.",domains:["secplus"]},
+  {a:"AES-256",f:"Advanced Encryption Standard 256-bit",d:"AES using a 256-bit key — the strongest AES variant, used where maximum encryption strength is required.",c:"crypto",why:"AES with a 256-bit key, the strongest standard symmetric setting.",ex:"Full-disk encryption with AES-256.",domains:["secplus"]},
+  {a:"ECC",f:"Elliptic Curve Cryptography",d:"Public-key cryptography using elliptic curves — smaller keys and faster performance than RSA.",c:"crypto",why:"Cryptography on elliptic curves: RSA-level security with smaller, faster keys, good for mobile and IoT.",domains:["secplus"]},
+  {a:"ECDHE",f:"Elliptic Curve Diffie-Hellman Ephemeral",d:"Key exchange using elliptic curves with ephemeral keys, providing perfect forward secrecy.",c:"crypto",why:"The ephemeral elliptic-curve key exchange in modern TLS. A fresh secret per session gives forward secrecy.",domains:["net", "secplus"]},
+  {a:"DHE",f:"Diffie-Hellman Ephemeral",d:"Diffie-Hellman key exchange using temporary keys — enables perfect forward secrecy.",c:"crypto",why:"Ephemeral Diffie-Hellman. A new key each session keeps past traffic safe if a long-term key later leaks.",domains:["secplus"]},
+  {a:"PFS",f:"Perfect Forward Secrecy",d:"Cryptographic property ensuring session keys are not compromised even if long-term keys are later exposed.",c:"crypto",why:"Compromising one session key, or even the server's long-term key, can't unlock past sessions.",ex:"TLS with ECDHE so yesterday's traffic stays private.",domains:["secplus"]},
+  {a:"HMAC",f:"Hashed Message Authentication Code",d:"Uses a cryptographic hash and secret key to verify data integrity and authenticity.",c:"crypto",why:"Mixes a hash with a secret key to prove a message's integrity and where it came from.",ex:"Signing an API request with HMAC-SHA256.",domains:["secplus"]},
+  {a:"CRL",f:"Certificate Revocation List",d:"List published by a CA of certificates that have been revoked before their expiration date.",c:"crypto",why:"A published list of revoked certificates so clients can reject ones that were compromised.",domains:["secplus"]},
+  {a:"OCSP",f:"Online Certificate Status Protocol",d:"Real-time protocol for checking whether a digital certificate has been revoked.",c:"crypto",why:"A faster alternative to CRLs: clients check a single certificate's status in real time.",domains:["secplus"]},
+  {a:"CSR",f:"Certificate Signing Request",d:"Encoded message sent to a CA to apply for a digital certificate, containing the public key and identity info.",c:"crypto",why:"The request you send a CA to get a certificate. It carries your public key and identity.",ex:"Generating a CSR on a web server before obtaining a TLS cert.",domains:["secplus"]},
+  {a:"TPM",f:"Trusted Platform Module",d:"Dedicated microcontroller on a motherboard that stores cryptographic keys and enables hardware-based security.",c:"crypto",why:"A secure chip that stores keys and checks boot integrity, underpinning disk encryption and secure boot.",ex:"BitLocker tying its key to the TPM and a known-good boot.",domains:["secplus"]},
+  {a:"DES",f:"Data Encryption Standard",d:"Older symmetric-key encryption algorithm — considered insecure today, replaced by AES.",c:"crypto",legacy:"Its 56-bit key falls to brute force in hours. Replaced by AES (and 3DES, now also retired).",domains:["secplus"]},
+  {a:"RC4",f:"Rivest Cipher 4",d:"Stream cipher once widely used in SSL/WEP — now considered cryptographically broken.",c:"crypto",legacy:"A stream cipher with fatal weaknesses. Banned from TLS and replaced by AES-GCM and ChaCha20.",domains:["secplus"]},
+  {a:"MD5",f:"Message Digest 5",d:"Widely used hash function producing a 128-bit hash — considered broken for security purposes.",c:"crypto",legacy:"Collisions make it unsafe for security. Use SHA-256. Fine only for non-security checksums.",domains:["secplus"]},
+  {a:"PBKDF2",f:"Password-based Key Derivation Function 2",d:"Applies a pseudorandom function to a password with a salt to produce a derived key, slowing brute-force attacks.",c:"crypto",why:"Turns a password into a key slowly and with a salt, so brute-forcing it is expensive.",ex:"Storing passwords with PBKDF2, bcrypt, or Argon2.",domains:["secplus"]},
+  {a:"S/MIME",f:"Secure/Multipurpose Internet Mail Extensions",d:"Standard for public-key encryption and signing of email messages.",c:"crypto",why:"A standard for signing and encrypting email with certificates.",ex:"Outlook signing mail so recipients can verify the sender.",domains:["secplus"]},
   {a:"RADIUS",f:"Remote Authentication Dial-in User Service",d:"Networking protocol providing centralized authentication, authorization, and accounting for network access.",c:"identity"},
   {a:"TACACS+",f:"Terminal Access Controller Access Control System Plus",d:"Cisco-developed protocol providing granular AAA services, separating authentication from authorization.",c:"identity"},
   {a:"CHAP",f:"Challenge Handshake Authentication Protocol",d:"Authentication protocol that verifies identity using a three-way handshake without sending the password over the wire.",c:"identity"},
@@ -1264,7 +1288,7 @@ const data = [
   {a:"FPGA",f:"Field Programmable Gate Array",d:"Reconfigurable integrated circuit that can be programmed after manufacturing — used in specialized security hardware.",c:"infra"},
   {a:"VDI",f:"Virtual Desktop Infrastructure",d:"Hosts desktop environments on a centralized server streamed to end users — easier to secure and patch.",c:"infra"},
   {a:"UPS",f:"Uninterruptible Power Supply",d:"Battery backup system providing emergency power to prevent data loss and downtime during outages.",c:"infra"},
-  {a:"AH",f:"Authentication Header",d:"IPSec protocol that provides data integrity and authentication for IP packets but does not encrypt the payload.",c:"crypto"},
+  {a:"AH",f:"Authentication Header",d:"IPSec protocol that provides data integrity and authentication for IP packets but does not encrypt the payload.",c:"crypto",why:"The IPSec piece that authenticates packets for integrity but does not encrypt them.",domains:["net"]},
   {a:"AI",f:"Artificial Intelligence",d:"Machine learning-based systems used in cybersecurity for threat detection, anomaly analysis, and automated response.",c:"infra"},
   {a:"AP",f:"Access Point",d:"Wireless networking device that allows Wi-Fi devices to connect to a wired network.",c:"network"},
   {a:"ATT&CK",f:"Adversarial Tactics, Techniques, and Common Knowledge",d:"MITRE framework documenting real-world adversary behaviors organized as a matrix of tactics and techniques.",c:"threat",why:"MITRE's knowledge base of real attacker tactics and techniques — the shared language for detection and threat intel.",ex:"Mapping a detection to technique T1059 (Command and Scripting Interpreter) in the ATT&CK matrix.",domains:["ti", "soc"],tools:["MITRE ATT&CK Navigator"]},
@@ -1275,10 +1299,10 @@ const data = [
   {a:"BPDU",f:"Bridge Protocol Data Unit",d:"Message used by spanning tree protocol to prevent loops — BPDU guard protects against rogue switches.",c:"network"},
   {a:"CAPTCHA",f:"Completely Automated Public Turing Test to Tell Computers and Humans Apart",d:"Challenge-response test used to block automated bots from accessing web services.",c:"threat"},
   {a:"CAR",f:"Corrective Action Report",d:"Formal document identifying a security problem and the steps taken to fix it.",c:"compliance"},
-  {a:"CBC",f:"Cipher Block Chaining",d:"Block cipher mode where each block of plaintext is XORed with the previous ciphertext block before encryption.",c:"crypto"},
-  {a:"CCMP",f:"Counter Mode/CBC-MAC Protocol",d:"Encryption protocol used in WPA2 based on AES — replaced the weaker TKIP.",c:"crypto"},
+  {a:"CBC",f:"Cipher Block Chaining",d:"Block cipher mode where each block of plaintext is XORed with the previous ciphertext block before encryption.",c:"crypto",why:"A block-cipher mode where each block mixes with the previous one. Safe with a random IV, but needs care around padding.",domains:["secplus"]},
+  {a:"CCMP",f:"Counter Mode/CBC-MAC Protocol",d:"Encryption protocol used in WPA2 based on AES — replaced the weaker TKIP.",c:"crypto",why:"The AES-based protocol that secures WPA2 Wi-Fi, replacing the broken TKIP.",domains:["net", "secplus"]},
   {a:"CCTV",f:"Closed-circuit Television",d:"Video surveillance system used as a physical security control to monitor and record activity.",c:"compliance"},
-  {a:"CFB",f:"Cipher Feedback",d:"Block cipher mode that converts a block cipher into a stream cipher for continuous encryption.",c:"crypto"},
+  {a:"CFB",f:"Cipher Feedback",d:"Block cipher mode that converts a block cipher into a stream cipher for continuous encryption.",c:"crypto",why:"A mode that turns a block cipher into a self-synchronizing stream cipher."},
   {a:"CIA",f:"Confidentiality, Integrity, and Availability",d:"The three core principles of information security — the foundation of all security controls.",c:"compliance"},
   {a:"CIO",f:"Chief Information Officer",d:"Executive responsible for an organization's IT strategy and infrastructure.",c:"compliance"},
   {a:"CMS",f:"Content Management System",d:"Platform for creating and managing digital content — commonly targeted due to plugin vulnerabilities.",c:"threat"},
@@ -1287,7 +1311,7 @@ const data = [
   {a:"CP",f:"Contingency Planning",d:"Process of preparing for unexpected disruptions to business operations.",c:"compliance"},
   {a:"CRC",f:"Cyclical Redundancy Check",d:"Error-detecting code used to verify data integrity during transmission — not a security control.",c:"protocol"},
   {a:"CSO",f:"Chief Security Officer",d:"Executive responsible for the physical and cybersecurity of an organization.",c:"compliance"},
-  {a:"CTR",f:"Counter Mode",d:"Block cipher mode that turns a block cipher into a stream cipher using an incrementing counter.",c:"crypto"},
+  {a:"CTR",f:"Counter Mode",d:"Block cipher mode that turns a block cipher into a stream cipher using an incrementing counter.",c:"crypto",why:"A mode that turns a block cipher into a parallel stream cipher by encrypting a counter. It's the basis of GCM."},
   {a:"CTO",f:"Chief Technology Officer",d:"Executive responsible for technology strategy and innovation within an organization.",c:"compliance"},
   {a:"CYOD",f:"Choose Your Own Device",d:"Policy allowing employees to select from approved devices rather than using any personal device.",c:"compliance"},
   {a:"DBA",f:"Database Administrator",d:"Person responsible for managing and securing databases — key role in data protection.",c:"compliance"},
@@ -1295,17 +1319,17 @@ const data = [
   {a:"DNAT",f:"Destination Network Address Translation",d:"Rewrites the destination IP of inbound packets — used in port forwarding and load balancing.",c:"network"},
   {a:"DPO",f:"Data Privacy Officer",d:"Role required under GDPR responsible for overseeing data protection strategy and compliance.",c:"compliance"},
   {a:"DSL",f:"Digital Subscriber Line",d:"Broadband internet connection over telephone lines — relevant in network topology discussions.",c:"network"},
-  {a:"ECB",f:"Electronic Code Book",d:"Simplest block cipher mode that encrypts each block independently — considered insecure due to pattern leakage.",c:"crypto"},
-  {a:"EFS",f:"Encrypted File System",d:"Windows feature allowing individual files and folders to be encrypted using the user's credentials.",c:"crypto"},
+  {a:"ECB",f:"Electronic Code Book",d:"Simplest block cipher mode that encrypts each block independently — considered insecure due to pattern leakage.",c:"crypto",why:"The simplest block mode, and the one to avoid: identical input blocks produce identical output, leaking patterns.",domains:["secplus"]},
+  {a:"EFS",f:"Encrypted File System",d:"Windows feature allowing individual files and folders to be encrypted using the user's credentials.",c:"crypto",why:"Windows file-level encryption tied to a user account, protecting individual files at rest."},
   {a:"ERP",f:"Enterprise Resource Planning",d:"Integrated business software managing core processes — a high-value attack target.",c:"infra"},
   {a:"ESN",f:"Electronic Serial Number",d:"Unique identifier assigned to mobile devices — relevant in device tracking and authentication.",c:"identity"},
-  {a:"ESP",f:"Encapsulated Security Payload",d:"IPSec protocol that provides encryption, confidentiality, and optional authentication for IP packets.",c:"crypto"},
+  {a:"ESP",f:"Encapsulated Security Payload",d:"IPSec protocol that provides encryption, confidentiality, and optional authentication for IP packets.",c:"crypto",why:"The IPSec piece that actually encrypts the packet payload.",domains:["net"]},
   {a:"FACL",f:"File System Access Control List",d:"Extended ACL attached to individual files and directories controlling granular access permissions.",c:"identity"},
-  {a:"FDE",f:"Full Disk Encryption",d:"Encryption of an entire drive so data is unreadable without proper authentication.",c:"crypto"},
+  {a:"FDE",f:"Full Disk Encryption",d:"Encryption of an entire drive so data is unreadable without proper authentication.",c:"crypto",why:"Encrypts a whole drive so its contents are unreadable without the key, the main defense for lost laptops.",domains:["secplus"]},
   {a:"FRR",f:"False Rejection Rate",d:"Biometric metric measuring how often a legitimate user is incorrectly denied access.",c:"identity"},
   {a:"FTPS",f:"FTP Secure",d:"FTP over SSL/TLS providing encrypted file transfers — distinct from SFTP, which runs over SSH.",c:"protocol"},
-  {a:"GCM",f:"Galois Counter Mode",d:"Authenticated encryption mode combining counter mode encryption with authentication — used in AES-GCM.",c:"crypto"},
-  {a:"GPG",f:"GNU Privacy Guard",d:"Free open-source implementation of PGP for encrypting and signing data and communications.",c:"crypto"},
+  {a:"GCM",f:"Galois Counter Mode",d:"Authenticated encryption mode combining counter mode encryption with authentication — used in AES-GCM.",c:"crypto",why:"An authenticated mode giving confidentiality and integrity at once. AES-GCM is the modern default in TLS.",domains:["secplus"]},
+  {a:"GPG",f:"GNU Privacy Guard",d:"Free open-source implementation of PGP for encrypting and signing data and communications.",c:"crypto",why:"The free, open implementation of OpenPGP for encrypting and signing.",ex:"Signing a release with GPG so users can check it.",domains:["secplus"]},
   {a:"GPO",f:"Group Policy Object",d:"Windows Active Directory feature for centrally managing security settings across systems.",c:"identity"},
   {a:"GPS",f:"Global Positioning System",d:"Satellite navigation system — relevant in mobile security geofencing and location-based access controls.",c:"infra"},
   {a:"GPU",f:"Graphics Processing Unit",d:"Processor used for parallel computation — commonly used in password cracking and cryptomining attacks.",c:"threat"},
@@ -1314,18 +1338,18 @@ const data = [
   {a:"HTML",f:"Hypertext Markup Language",d:"Standard language for web pages — XSS attacks inject malicious scripts into HTML.",c:"threat"},
   {a:"HVAC",f:"Heating, Ventilation, and Air Conditioning",d:"Physical building systems — relevant to data center physical security and environmental controls.",c:"compliance"},
   {a:"IaC",f:"Infrastructure as Code",d:"Managing and provisioning infrastructure through code — misconfigurations can create security gaps.",c:"infra"},
-  {a:"IDEA",f:"International Data Encryption Algorithm",d:"Symmetric-key block cipher — older algorithm largely replaced by AES.",c:"crypto"},
+  {a:"IDEA",f:"International Data Encryption Algorithm",d:"Symmetric-key block cipher — older algorithm largely replaced by AES.",c:"crypto",legacy:"Once used in early PGP. Superseded by AES and mostly of historical interest now."},
   {a:"IDF",f:"Intermediate Distribution Frame",d:"Wiring rack connecting building cabling to the main distribution frame — physical security consideration.",c:"network"},
   {a:"IEEE",f:"Institute of Electrical and Electronics Engineers",d:"Standards body responsible for protocols like 802.11 Wi-Fi and 802.1X port authentication.",c:"protocol"},
-  {a:"IKE",f:"Internet Key Exchange",d:"Protocol used to set up a security association in IPSec by negotiating keys and algorithms.",c:"crypto"},
+  {a:"IKE",f:"Internet Key Exchange",d:"Protocol used to set up a security association in IPSec by negotiating keys and algorithms.",c:"crypto",why:"Negotiates the keys and settings that set up an IPSec tunnel.",domains:["net"]},
   {a:"IM",f:"Instant Messaging",d:"Real-time text communication — a vector for phishing, malware delivery, and data leakage.",c:"threat"},
   {a:"IR",f:"Incident Response",d:"Structured approach to handling and managing the aftermath of a security breach.",c:"operations"},
   {a:"IRC",f:"Internet Relay Chat",d:"Real-time chat protocol — historically used as a command-and-control channel for botnets.",c:"threat"},
   {a:"ISP",f:"Internet Service Provider",d:"Company providing internet access — relevant in upstream filtering, DDoS mitigation, and legal requests.",c:"network"},
   {a:"ISSO",f:"Information Systems Security Officer",d:"Person responsible for the day-to-day security of a specific information system.",c:"compliance"},
-  {a:"IV",f:"Initialization Vector",d:"Random value used with a key to encrypt data, ensuring identical plaintexts produce different ciphertext.",c:"crypto"},
+  {a:"IV",f:"Initialization Vector",d:"Random value used with a key to encrypt data, ensuring identical plaintexts produce different ciphertext.",c:"crypto",why:"A random starting value so encrypting the same text twice gives different output.",domains:["secplus"]},
   {a:"KDC",f:"Key Distribution Center",d:"Component of Kerberos authentication that issues tickets for network service access.",c:"identity"},
-  {a:"KEK",f:"Key Encryption Key",d:"Key used to encrypt other keys — protects keys at rest in key management systems.",c:"crypto"},
+  {a:"KEK",f:"Key Encryption Key",d:"Key used to encrypt other keys — protects keys at rest in key management systems.",c:"crypto",why:"A key whose only job is to encrypt other keys, which makes safe key storage and rotation possible."},
   {a:"LAN",f:"Local Area Network",d:"Network connecting devices within a limited area like a building or campus.",c:"network"},
   {a:"LEAP",f:"Lightweight Extensible Authentication Protocol",d:"Cisco proprietary wireless auth protocol — considered weak and deprecated.",c:"protocol"},
   {a:"MAN",f:"Metropolitan Area Network",d:"Network spanning a city or large campus — larger than LAN, smaller than WAN.",c:"network"},
@@ -1349,7 +1373,7 @@ const data = [
   {a:"OT",f:"Operational Technology",d:"Hardware and software monitoring and controlling physical devices in industrial environments.",c:"infra"},
   {a:"OTA",f:"Over the Air",d:"Wireless method of distributing firmware and software updates to mobile and IoT devices.",c:"infra"},
   {a:"OVAL",f:"Open Vulnerability Assessment Language",d:"XML-based standard for describing system security states and assessment results.",c:"compliance"},
-  {a:"P12",f:"PKCS #12",d:"File format storing a private key and certificate chain — protected by a password.",c:"crypto"},
+  {a:"P12",f:"PKCS #12",d:"File format storing a private key and certificate chain — protected by a password.",c:"crypto",why:"A file format that bundles a certificate with its private key, used for import and export."},
   {a:"P2P",f:"Peer to Peer",d:"Decentralized network where devices communicate directly — used by some malware for C2 communications.",c:"threat"},
   {a:"PAC",f:"Proxy Auto Configuration",d:"Script that tells a browser which proxy server to use — can be hijacked in WPAD attacks.",c:"network"},
   {a:"PAP",f:"Password Authentication Protocol",d:"Simple authentication protocol sending passwords in plaintext — considered insecure.",c:"identity"},
@@ -1357,31 +1381,31 @@ const data = [
   {a:"PBX",f:"Private Branch Exchange",d:"Internal telephone system — voice phishing and vishing attacks often target PBX systems.",c:"threat"},
   {a:"PDU",f:"Power Distribution Unit",d:"Device distributing electrical power in a data center — physical security and resilience consideration.",c:"infra"},
   {a:"PED",f:"Personal Electronic Device",d:"Any portable electronic device — relevant in BYOD policies and physical security controls.",c:"compliance"},
-  {a:"PEM",f:"Privacy Enhanced Mail",d:"Base64-encoded certificate format commonly used for TLS certificates and private keys.",c:"crypto"},
-  {a:"PKCS",f:"Public Key Cryptography Standards",d:"Set of RSA Security standards defining formats for cryptographic keys, certificates, and messages.",c:"crypto"},
+  {a:"PEM",f:"Privacy Enhanced Mail",d:"Base64-encoded certificate format commonly used for TLS certificates and private keys.",c:"crypto",why:"The common Base64 text format for certs and keys, the BEGIN CERTIFICATE files."},
+  {a:"PKCS",f:"Public Key Cryptography Standards",d:"Set of RSA Security standards defining formats for cryptographic keys, certificates, and messages.",c:"crypto",why:"A family of standards for formatting keys, certificates, and signatures so tools interoperate."},
   {a:"POP",f:"Post Office Protocol",d:"Protocol for retrieving email from a server — downloads messages and typically removes them from server.",c:"protocol"},
   {a:"POTS",f:"Plain Old Telephone Service",d:"Traditional analog telephone network — relevant in legacy infrastructure and vishing attack context.",c:"network"},
   {a:"PPP",f:"Point-to-Point Protocol",d:"Data link protocol for direct connections between two nodes — used in dial-up and some VPN tunnels.",c:"protocol"},
   {a:"PPTP",f:"Point-to-Point Tunneling Protocol",d:"VPN protocol considered insecure due to weak encryption — largely replaced by L2TP/IPSec and OpenVPN.",c:"network"},
-  {a:"PSK",f:"Pre-shared Key",d:"Secret value shared between parties before communication — used in WPA2-Personal and IPSec.",c:"crypto"},
+  {a:"PSK",f:"Pre-shared Key",d:"Secret value shared between parties before communication — used in WPA2-Personal and IPSec.",c:"crypto",why:"A secret shared ahead of time. Simple but hard to scale; used in WPA2-Personal and some VPNs.",domains:["net", "secplus"]},
   {a:"PTZ",f:"Pan-Tilt-Zoom",d:"Type of surveillance camera with remote directional and zoom control — used in physical security.",c:"compliance"},
   {a:"PUP",f:"Potentially Unwanted Program",d:"Software installed without clear consent that may display ads, track usage, or degrade performance.",c:"threat"},
-  {a:"RA",f:"Registration Authority",d:"Entity that verifies identity before a CA issues a digital certificate.",c:"crypto"},
-  {a:"RACE",f:"Research and Development in Advanced Communications Technologies in Europe",d:"European research initiative that produced cryptographic algorithms like RIPEMD.",c:"crypto"},
+  {a:"RA",f:"Registration Authority",d:"Entity that verifies identity before a CA issues a digital certificate.",c:"crypto",why:"Verifies identities on a CA's behalf, vetting requesters before certificates are issued."},
+  {a:"RACE",f:"Research and Development in Advanced Communications Technologies in Europe",d:"European research initiative that produced cryptographic algorithms like RIPEMD.",c:"crypto",legacy:"A defunct 1990s EU research program. It survives mainly as the 'R' in RIPEMD."},
   {a:"RAD",f:"Rapid Application Development",d:"Software development methodology emphasizing speed — security must be integrated, not bolted on.",c:"compliance"},
   {a:"RAID",f:"Redundant Array of Inexpensive Disks",d:"Storage technology combining multiple drives for redundancy or performance — relevant in data availability.",c:"infra"},
   {a:"RAS",f:"Remote Access Server",d:"Server enabling remote users to connect to an internal network — a key attack target.",c:"network"},
   {a:"RFID",f:"Radio Frequency Identification",d:"Wireless technology using electromagnetic fields to identify tags — used in access badges and asset tracking.",c:"identity"},
-  {a:"RIPEMD",f:"RACE Integrity Primitives Evaluation Message Digest",d:"Cryptographic hash function family developed in Europe — alternative to SHA.",c:"crypto"},
+  {a:"RIPEMD",f:"RACE Integrity Primitives Evaluation Message Digest",d:"Cryptographic hash function family developed in Europe — alternative to SHA.",c:"crypto",why:"A hash family that's an alternative to SHA. RIPEMD-160 still shows up in Bitcoin addresses, though SHA-2 dominates elsewhere."},
   {a:"ROI",f:"Return on Investment",d:"Financial metric used to justify security spending by comparing cost to risk reduction benefit.",c:"compliance"},
   {a:"RTBH",f:"Remotely Triggered Black Hole",d:"Network technique dropping traffic from specific sources to mitigate DDoS attacks at the routing level.",c:"network"},
   {a:"RTP",f:"Real-time Transport Protocol",d:"Protocol for delivering audio and video over IP networks — used in VoIP and video conferencing.",c:"protocol"},
-  {a:"SAE",f:"Simultaneous Authentication of Equals",d:"Authentication protocol used in WPA3 replacing PSK — resistant to offline dictionary attacks.",c:"crypto"},
+  {a:"SAE",f:"Simultaneous Authentication of Equals",d:"Authentication protocol used in WPA3 replacing PSK — resistant to offline dictionary attacks.",c:"crypto",why:"The WPA3 handshake (Dragonfly) that resists offline password guessing, replacing WPA2's weaker one.",domains:["net"]},
   {a:"SAN",f:"Storage Area Network",d:"High-speed network providing block-level storage access — requires strong access controls.",c:"infra"},
-  {a:"SCEP",f:"Simple Certificate Enrollment Protocol",d:"Protocol for automating certificate enrollment for network devices.",c:"crypto"},
+  {a:"SCEP",f:"Simple Certificate Enrollment Protocol",d:"Protocol for automating certificate enrollment for network devices.",c:"crypto",why:"Automates certificate enrollment for fleets of devices, common in MDM.",domains:["secplus"]},
   {a:"SDK",f:"Software Development Kit",d:"Collection of tools for building applications — insecure SDKs introduce vulnerabilities into software.",c:"operations"},
   {a:"SDLM",f:"Software Development Lifecycle Methodology",d:"Structured approach to software development integrating security at every phase.",c:"compliance"},
-  {a:"SED",f:"Self-encrypting Drive",d:"Storage drive with built-in hardware encryption that automatically encrypts all stored data.",c:"crypto"},
+  {a:"SED",f:"Self-encrypting Drive",d:"Storage drive with built-in hardware encryption that automatically encrypts all stored data.",c:"crypto",why:"A drive that encrypts itself in hardware automatically, with no speed penalty."},
   {a:"SEH",f:"Structured Exception Handler",d:"Windows mechanism for handling errors — exploited in SEH-based buffer overflow attacks.",c:"threat"},
   {a:"SELinux",f:"Security-enhanced Linux",d:"Linux kernel security module providing mandatory access controls — used to confine processes.",c:"infra"},
   {a:"SHTTP",f:"Secure Hypertext Transfer Protocol",d:"Early alternative to HTTPS for securing web communications — largely obsolete.",c:"protocol"},
@@ -1393,7 +1417,7 @@ const data = [
   {a:"SRTP",f:"Secure Real-Time Protocol",d:"Encrypted version of RTP providing confidentiality and authentication for VoIP and video.",c:"protocol"},
   {a:"SSD",f:"Solid State Drive",d:"Flash-based storage device — secure deletion is more complex than with traditional HDDs.",c:"infra"},
   {a:"TGT",f:"Ticket Granting Ticket",d:"Kerberos token issued after initial authentication used to request service tickets without re-entering credentials.",c:"identity"},
-  {a:"TKIP",f:"Temporal Key Integrity Protocol",d:"Encryption protocol used in WPA — considered weak and replaced by CCMP/AES in WPA2.",c:"crypto"},
+  {a:"TKIP",f:"Temporal Key Integrity Protocol",d:"Encryption protocol used in WPA — considered weak and replaced by CCMP/AES in WPA2.",c:"crypto",legacy:"A stopgap for the original WPA. Deprecated and replaced by AES-CCMP in WPA2.",domains:["net"]},
   {a:"TOC",f:"Time-of-check",d:"First part of a TOCTOU race condition — the moment a security check is performed.",c:"threat"},
   {a:"TOU",f:"Time-of-use",d:"Second part of a TOCTOU race condition — the moment a resource is actually used after the check.",c:"threat"},
   {a:"TSIG",f:"Transaction Signature",d:"DNS security mechanism using shared secret keys to authenticate DNS messages between servers.",c:"protocol"},
@@ -1409,17 +1433,17 @@ const data = [
   {a:"VTC",f:"Video Teleconferencing",d:"Real-time video communication system — relevant in remote work security and eavesdropping risks.",c:"infra"},
   {a:"VoIP",f:"Voice over IP",d:"Technology delivering voice calls over IP networks — vulnerable to eavesdropping and toll fraud.",c:"protocol"},
   {a:"WAP",f:"Wireless Access Point",d:"Device connecting wireless clients to a wired network — rogue WAPs are a common attack tool.",c:"network"},
-  {a:"WEP",f:"Wired Equivalent Privacy",d:"Original Wi-Fi encryption standard — cryptographically broken and must never be used.",c:"crypto"},
+  {a:"WEP",f:"Wired Equivalent Privacy",d:"Original Wi-Fi encryption standard — cryptographically broken and must never be used.",c:"crypto",legacy:"Crackable in minutes. Replaced by WPA2 and WPA3; never use it.",domains:["net", "secplus"]},
   {a:"WO",f:"Work Order",d:"Document authorizing and detailing specific IT or security work to be performed.",c:"compliance"},
-  {a:"WPA",f:"Wi-Fi Protected Access",d:"Wi-Fi security protocol replacing WEP — WPA2 and WPA3 are the current standards.",c:"crypto"},
+  {a:"WPA",f:"Wi-Fi Protected Access",d:"Wi-Fi security protocol replacing WEP — WPA2 and WPA3 are the current standards.",c:"crypto",legacy:"First-generation Wi-Fi security using TKIP. Superseded by WPA2 and WPA3.",domains:["net", "secplus"]},
   {a:"WPS",f:"Wi-Fi Protected Setup",d:"Feature for easily connecting devices to Wi-Fi — vulnerable to brute-force PIN attacks.",c:"network"},
-  {a:"WTLS",f:"Wireless TLS",d:"TLS adapted for wireless devices with limited processing power — largely obsolete.",c:"crypto"},
+  {a:"WTLS",f:"Wireless TLS",d:"TLS adapted for wireless devices with limited processing power — largely obsolete.",c:"crypto",legacy:"The wireless TLS from the old WAP stack. Obsolete along with WAP itself."},
   {a:"XML",f:"Extensible Markup Language",d:"Flexible markup language used in web services and configs — vulnerable to XXE injection attacks.",c:"protocol"},
-  {a:"XOR",f:"Exclusive Or",d:"Fundamental binary operation used in many encryption algorithms and hash functions.",c:"crypto"},
+  {a:"XOR",f:"Exclusive Or",d:"Fundamental binary operation used in many encryption algorithms and hash functions.",c:"crypto",why:"The reversible bitwise operation at the core of many ciphers and the building block of stream encryption."},
   {a:"XSRF",f:"Cross-site Request Forgery",d:"Alternate acronym for CSRF — same attack tricking authenticated users into submitting malicious requests.",c:"threat"},
   {a:"QUIC",f:"Quick UDP Internet Connections",d:"Modern transport protocol developed by Google using UDP — designed to reduce latency and is the basis of HTTP/3.",c:"protocol"},
-  {a:"WPA2",f:"Wi-Fi Protected Access 2",d:"Current mainstream Wi-Fi security standard using AES/CCMP encryption — replaced WPA.",c:"crypto"},
-  {a:"WPA3",f:"Wi-Fi Protected Access 3",d:"Latest Wi-Fi security standard using SAE instead of PSK — provides stronger protection against brute-force attacks.",c:"crypto"},
+  {a:"WPA2",f:"Wi-Fi Protected Access 2",d:"Current mainstream Wi-Fi security standard using AES/CCMP encryption — replaced WPA.",c:"crypto",why:"The long-time Wi-Fi security standard, using AES-CCMP. Still common, though WPA3 improves on it.",domains:["net", "secplus"]},
+  {a:"WPA3",f:"Wi-Fi Protected Access 3",d:"Latest Wi-Fi security standard using SAE instead of PSK — provides stronger protection against brute-force attacks.",c:"crypto",why:"The current Wi-Fi security standard. Its SAE handshake resists the password-guessing attacks that hit WPA2.",domains:["net", "secplus"]},
   {a:"802.1X",f:"IEEE 802.1X Port-based Network Access Control",d:"Standard for port-based NAC — requires authentication before granting network access, used in enterprise Wi-Fi and wired networks.",c:"protocol"},
   {a:"DoH",f:"DNS over HTTPS",d:"Protocol encrypting DNS queries inside HTTPS traffic to prevent eavesdropping and manipulation.",c:"protocol"},
   {a:"DoT",f:"DNS over TLS",d:"Protocol encrypting DNS queries using TLS to protect DNS traffic from interception.",c:"protocol"},
@@ -1616,8 +1640,10 @@ function render() {
       (on ? 'Unstar' : 'Star') + '" aria-label="Star ' + escAttr(x.a) + '" onclick="toggleFav(\'' + aEsc + '\', this, event)">' +
       (on ? '★' : '☆') + '</button>';
     const copyBtn = '<button class="copy-btn" data-a="' + escAttr(x.a) + '" data-f="' + escAttr(x.f) + '" data-d="' + escAttr(x.d) + '" data-tip="Copy definition" onclick="event.stopPropagation();copyCard(this)">⎘</button>';
+    const legacyTag = x.legacy ? '<span class="legacy-tag" title="Legacy / historical — not commonly used today">⏳ Legacy</span>' : '';
 
     // ── Optional authored depth (renders only when the data exists) ──
+    const legacyHtml = x.legacy ? '<div class="legacy-note"><span class="ctx-label">Legacy</span>' + x.legacy + '</div>' : '';
     const domHtml = (Array.isArray(x.domains) && x.domains.length)
       ? '<div class="domain-row">' + x.domains.map(d =>
           '<span class="domain-chip" onclick="event.stopPropagation();setFilter(\'domain:' + d + '\')" title="Filter by ' + (domainMap[d] || d) + '">' + (domainMap[d] || d) + '</span>'
@@ -1644,13 +1670,14 @@ function render() {
           '<div class="ia hidden">' + (x.ia || '') + '</div>' +
         '</div>';
     }
-    const extra = domHtml + whyHtml + exHtml + careerHtml + iqHtml;
+    const extra = legacyHtml + domHtml + whyHtml + exHtml + careerHtml + iqHtml;
 
     if (listView) {
       return '<div class="card" id="' + id + '" data-cat="' + x.c + '" style="animation-delay:' + Math.min(i*0.02,0.4) + 's">' +
         '<div class="list-left">' +
           '<span class="acronym-text" onclick="setHash(\'' + aEsc + '\')" title="Copy link">' + x.a + '</span>' +
           '<span class="badge">' + labelMap[x.c] + '</span>' +
+          legacyTag +
         '</div>' +
         '<div class="list-body">' +
           '<div class="full-name">' + x.f + '</div>' +
@@ -1667,6 +1694,7 @@ function render() {
           '<span class="acronym-text" onclick="setHash(\'' + aEsc + '\')" title="Copy link">' + x.a + '</span>' +
         '</div>' +
         '<span class="badge">' + labelMap[x.c] + '</span>' +
+        legacyTag +
         favBtn +
         copyBtn +
       '</div>' +
