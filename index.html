@@ -208,7 +208,15 @@
   }
 
   .filter-btn:hover { border-color: var(--border2); color: var(--text); }
-  .filter-btn.active { background: var(--cat); border-color: var(--cat); color: var(--bg); font-weight: 600; }
+  /* Active filter = a tint of its own category color, not a solid block.
+     Keeps category identity while reserving the one solid-green button (Quiz me)
+     as the single loudest action on screen. */
+  .filter-btn.active {
+    background: color-mix(in oklab, var(--cat) 16%, var(--surface));
+    border-color: var(--cat);
+    color: var(--cat);
+    font-weight: 600;
+  }
 
   .filter-btn[data-cat="network"]    { --cat: var(--network); }
   .filter-btn[data-cat="threat"]     { --cat: var(--threat); }
@@ -499,9 +507,9 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 8px;
-    margin-top: 10px;
-    padding-top: 12px;
-    border-top: 1px dashed var(--border);
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--border2);
   }
   .track-label {
     font-family: 'IBM Plex Mono', monospace;
@@ -511,13 +519,14 @@
     color: var(--muted);
     margin-right: 2px;
   }
-  .domain-btn { border-style: dashed; }
-  .domain-btn.active {
-    background: var(--accent);
-    color: var(--bg);
-    border-color: var(--accent);
-    border-style: solid;
+  /* Study-track pills are a different filter axis than categories, so they read
+     as their own group: a faint wash + a dashed border (vs. the solid-bordered
+     category pills). The active state firms the dash into a solid border. */
+  .domain-btn {
+    border-style: dashed;
+    background: color-mix(in oklab, var(--accent) 6%, var(--surface));
   }
+  .domain-btn.active { border-style: solid; }
 
   /* ── Authored depth on cards ── */
   .domain-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 2px; }
@@ -707,7 +716,8 @@
     .filters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
     .filters::-webkit-scrollbar { height: 3px; }
     .filters::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-    .az-nav { padding-left: 1rem; padding-right: 1rem; }
+    .az-nav { padding-left: 1rem; padding-right: 1rem; gap: 5px; }
+    .az-btn { padding: 7px 9px; min-width: 32px; font-size: 12px; }
     .copy-btn { opacity: 1; }
     .share-fab { bottom: 16px; right: 16px; }
     .share-panel { min-width: 190px; }
@@ -725,27 +735,32 @@
     gap: 10px;
   }
 
+  /* Secondary action: neutral surface, not a second solid-green button.
+     Keeps the one primary green CTA (Quiz me) unambiguous while staying
+     discoverable as a floating control. */
   .share-fab-btn {
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 11px 20px;
-    background: var(--accent);
-    color: var(--bg);
-    border: none;
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border2);
     border-radius: 50px;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 4px 20px color-mix(in oklab, var(--accent) 35%, transparent);
-    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s, color 0.2s;
     letter-spacing: 0.03em;
   }
 
   .share-fab-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 28px color-mix(in oklab, var(--accent) 45%, transparent);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 6px 28px rgba(0,0,0,0.55);
   }
 
   .share-panel {
@@ -1050,7 +1065,7 @@
 <header>
   <div class="header-tag">// reference guide</div>
   <h1><span id="total-count">—</span> Cybersecurity<br>Acronyms</h1>
-  <p class="subtitle">Every acronym you need to know — searchable, filterable, shareable.</p>
+  <p class="subtitle">Search, filter, and copy any security acronym definition.</p>
 
   <div class="controls">
     <div class="search-wrap">
@@ -1079,7 +1094,7 @@
       <button class="filter-btn domain-btn" data-cat="domain:net" data-label="Networking" onclick="setFilter('domain:net')">Networking</button>
       <button class="filter-btn domain-btn" data-cat="domain:cloud" data-label="Cloud Security" onclick="setFilter('domain:cloud')">Cloud Security</button>
       <button class="filter-btn domain-btn" data-cat="domain:ti" data-label="Threat Intel" onclick="setFilter('domain:ti')">Threat Intel</button>
-      <button class="filter-btn domain-btn" data-cat="domain:compliance" data-label="Compliance" onclick="setFilter('domain:compliance')">Compliance</button>
+      <button class="filter-btn domain-btn" data-cat="domain:compliance" data-label="Compliance Track" onclick="setFilter('domain:compliance')">Compliance Track</button>
       <button class="filter-btn domain-btn" data-cat="domain:secplus" data-label="Security+ Core" onclick="setFilter('domain:secplus')">Security+ Core</button>
     </div>
   </div>
