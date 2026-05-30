@@ -136,7 +136,7 @@
 
   input[type="text"] {
     width: 100%;
-    padding: 10px 12px 10px 38px;
+    padding: 10px 48px 10px 38px;
     background: var(--surface);
     border: 1px solid var(--border2);
     border-radius: 6px;
@@ -518,7 +518,8 @@
     <div class="search-wrap">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <label for="search" class="sr-only">Search acronyms</label>
-      <input type="text" id="search" placeholder="Search acronyms, names, definitions… (press / to focus)" oninput="render();saveState()" />
+      <input type="text" id="search" placeholder="Search acronyms, names, definitions…" oninput="render();saveState()" />
+      <kbd class="search-kbd">/</kbd>
     </div>
     <div class="filters" id="filters">
       <button class="filter-btn active" data-cat="" data-label="All" onclick="setFilter('')">All</button>
