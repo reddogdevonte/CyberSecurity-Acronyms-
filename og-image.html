@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<!-- Source for og-image.png. Open at 1200x630 and screenshot to regenerate the social card. -->
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0e14;
+    --surface: #111720;
+    --surface2: #19212e;
+    --border2: rgba(255,255,255,0.13);
+    --text: #e8edf4;
+    --muted: #7d8fa8;
+    --accent: #00e5a0;
+  }
+  html, body { width: 1200px; height: 630px; }
+  body {
+    background:
+      radial-gradient(900px 500px at 80% -10%, rgba(0,229,160,0.16), transparent 60%),
+      radial-gradient(700px 500px at 0% 120%, rgba(0,229,160,0.07), transparent 55%),
+      var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 84px 96px;
+    position: relative;
+    overflow: hidden;
+  }
+  /* subtle grid texture */
+  body::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(circle at 70% 30%, black, transparent 75%);
+  }
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 30px;
+    position: relative;
+  }
+  h1 {
+    font-size: 98px;
+    line-height: 0.98;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    position: relative;
+    max-width: 880px;
+  }
+  h1 .count { color: var(--accent); }
+  .sub {
+    margin-top: 34px;
+    font-size: 30px;
+    font-weight: 300;
+    color: var(--muted);
+    position: relative;
+    max-width: 880px;
+  }
+  .chips {
+    margin-top: 44px;
+    display: flex;
+    gap: 14px;
+    position: relative;
+    flex-wrap: wrap;
+  }
+  .chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 20px;
+    padding: 9px 20px;
+    border-radius: 50px;
+    border: 1px solid var(--border2);
+    background: var(--surface2);
+    color: var(--text);
+  }
+  .lock {
+    position: absolute;
+    top: 44px; right: 84px;
+    font-size: 124px;
+    line-height: 1;
+    filter: drop-shadow(0 0 40px rgba(0,229,160,0.35));
+  }
+  .domain {
+    position: absolute;
+    bottom: 70px; right: 96px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+  <div class="lock">🔐</div>
+  <div class="tag">// reference guide</div>
+  <h1><span class="count">346</span> Cybersecurity<br>Acronyms</h1>
+  <div class="sub">Every acronym you need to know — searchable, filterable, and quiz-ready.</div>
+  <div class="chips">
+    <span class="chip">Search</span>
+    <span class="chip">Filter by category</span>
+    <span class="chip">★ Favorites</span>
+    <span class="chip">Quiz mode</span>
+  </div>
+  <div class="domain">reddogdevonte.github.io</div>
+</body>
+</html>
