@@ -106,6 +106,24 @@
     max-width: 420px;
   }
 
+  .search-kbd {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 2px 6px;
+    pointer-events: none;
+    transition: opacity 0.15s;
+  }
+
+  #search:focus ~ .search-kbd { opacity: 0; }
+
   .search-wrap svg {
     position: absolute;
     left: 12px;
@@ -308,7 +326,7 @@
 
   .acronym-text {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 600;
     line-height: 1;
     cursor: pointer;
@@ -400,7 +418,7 @@
   }
 
   .full-name {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--muted);
     margin-bottom: 7px;
     font-weight: 300;
@@ -408,7 +426,7 @@
   }
 
   .definition {
-    font-size: 13px;
+    font-size: 15px;
     color: #aab4c4;
     line-height: 1.6;
     font-weight: 300;
@@ -475,6 +493,9 @@
   @media (max-width: 600px) {
     header, main { padding-left: 1rem; padding-right: 1rem; }
     h1 { font-size: 1.6rem; }
+    .acronym-text { font-size: 20px; }
+    .full-name { font-size: 12px; }
+    .definition { font-size: 13px; }
     .list-view .card { flex-wrap: wrap; }
     .list-view .list-left { flex-direction: row; align-items: center; width: auto; flex-wrap: wrap; gap: 8px; }
     .list-view .list-body { width: 100%; flex: none; }
