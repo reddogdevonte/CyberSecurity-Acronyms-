@@ -3,6 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- Content Security Policy: only this origin, Google Fonts, and GoatCounter analytics
+     may load resources. 'unsafe-inline' is required because the app ships as one inline
+     script with inline event handlers; the value is in locking down external origins.
+     Note: frame-ancestors/X-Frame-Options can't be set on GitHub Pages (no header control). -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.goatcounter.com; connect-src 'self' https://*.goatcounter.com; object-src 'none'; base-uri 'self'; form-action 'none'" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+<meta name="theme-color" content="#0a0e14" />
+<meta name="author" content="reddogdevonte" />
+<meta name="robots" content="index, follow" />
 <title>Cybersecurity Acronyms Reference</title>
 <meta name="description" content="A searchable, filterable reference of cybersecurity acronyms — from AAA to ZTNA, with full definitions organized by category." />
 <link rel="canonical" href="https://reddogdevonte.github.io/CyberSecurity-Acronyms-/" />
@@ -21,9 +30,9 @@
 <meta name="twitter:image" content="https://reddogdevonte.github.io/CyberSecurity-Acronyms-/og-image.png" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>" />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-<!-- Privacy-first analytics — no cookies, no GDPR banner needed.
-     Sign up free at https://www.goatcounter.com, then replace YOUR-SITE below with your site code. -->
-<script data-goatcounter="https://devonte.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<!-- Privacy-first analytics — no cookies, no GDPR banner needed. https://www.goatcounter.com
+     Explicit https (not protocol-relative) so it satisfies the Content-Security-Policy above. -->
+<script data-goatcounter="https://devonte.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1289,6 +1298,10 @@ const labelMap = {
 let currentCat = '';
 let currentView = 'grid';
 
+// Canonical page URL — used for copy-watermarking, share, and structured data.
+const PAGE_URL = window.location.origin + window.location.pathname;
+const COPY_SRC = '\n\nSource: ' + PAGE_URL;
+
 // ── Favorites ──
 let favs = new Set();
 try { favs = new Set(JSON.parse(localStorage.getItem('cyberfavs') || '[]')); } catch(e) {}
@@ -1358,7 +1371,7 @@ function escAttr(s) {
 }
 
 function copyCard(btn) {
-  const text = btn.dataset.a + ' — ' + btn.dataset.f + ': ' + btn.dataset.d;
+  const text = btn.dataset.a + ' — ' + btn.dataset.f + ': ' + btn.dataset.d + COPY_SRC;
   function onSuccess() {
     btn.textContent = '✓';
     btn.dataset.tip = 'Copied!';
@@ -1502,9 +1515,30 @@ function initFromHash() {
 // Init
 document.getElementById('total-count').textContent = data.length;
 document.getElementById('footer').textContent =
-  'CYBERSECURITY ACRONYM REFERENCE  ·  ' + data.length + ' TERMS';
+  'CYBERSECURITY ACRONYM REFERENCE  ·  ' + data.length + ' TERMS  ·  © ' + new Date().getFullYear() + ' reddogdevonte.github.io';
 // Sort alphabetically
 data.sort((a, b) => a.a.localeCompare(b.a, undefined, {sensitivity: 'base'}));
+
+// SEO: inject schema.org DefinedTermSet structured data from the single source of
+// truth (the data array), so search engines can index every acronym as a defined term.
+(function injectGlossarySchema() {
+  const ld = {
+    "@context": "https://schema.org",
+    "@type": "DefinedTermSet",
+    "name": "Cybersecurity Acronyms Reference",
+    "description": "A searchable reference of " + data.length +
+      " cybersecurity acronyms with full definitions, organized by category.",
+    "url": PAGE_URL,
+    "inLanguage": "en",
+    "hasDefinedTerm": data.map(function(x) {
+      return { "@type": "DefinedTerm", "name": x.a, "description": x.f + " — " + x.d };
+    })
+  };
+  const s = document.createElement('script');
+  s.type = 'application/ld+json';
+  s.textContent = JSON.stringify(ld);
+  document.head.appendChild(s);
+})();
 
 // Keyboard shortcuts
 document.addEventListener('keydown', e => {
@@ -1529,6 +1563,19 @@ document.addEventListener('keydown', e => {
     if (search.value) { search.value = ''; render(); saveState(); }
     else search.blur();
   }
+});
+
+// Watermark substantial copies with a source link (content protection + backlinks).
+// Small selections (search terms, a single word) are left untouched. The copy-button
+// path appends its own source line, so this only affects manual text selection.
+document.addEventListener('copy', function(e) {
+  try {
+    const sel = window.getSelection().toString();
+    if (sel && sel.trim().length > 60 && e.clipboardData) {
+      e.clipboardData.setData('text/plain', sel + COPY_SRC);
+      e.preventDefault();
+    }
+  } catch (err) {}
 });
 
 // Restore state: URL params take priority, localStorage as fallback

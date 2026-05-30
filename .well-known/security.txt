@@ -1,0 +1,5 @@
+# Security contact for this site. https://securitytxt.org/
+Contact: mailto:reddogdevonte@gmail.com
+Expires: 2027-05-29T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://reddogdevonte.github.io/CyberSecurity-Acronyms-/.well-known/security.txt

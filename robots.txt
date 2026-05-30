@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://reddogdevonte.github.io/CyberSecurity-Acronyms-/sitemap.xml
