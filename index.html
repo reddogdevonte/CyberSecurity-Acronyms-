@@ -490,6 +490,127 @@
     font-weight: 300;
   }
 
+  /* ── Study-tracks (domain) filter row ── */
+  .domain-filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+  }
+  .track-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 2px;
+  }
+  .domain-btn { border-style: dashed; }
+  .domain-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    border-style: solid;
+  }
+
+  /* ── Authored depth on cards ── */
+  .domain-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 2px; }
+  .domain-chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    padding: 3px 9px;
+    border-radius: 50px;
+    border: 1px dashed var(--border2);
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .domain-chip:hover { color: var(--accent); border-color: var(--accent); }
+
+  .ctx-label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 3px;
+    opacity: 0.85;
+  }
+  .why, .example {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 11px;
+    color: #c2ccda;
+    font-weight: 300;
+  }
+  .example { color: var(--muted); }
+
+  .depth-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 12px 8px 0 0;
+    padding: 6px 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 50px;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .depth-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .depth {
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+  }
+  .depth-sub + .depth-sub { margin-top: 12px; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .pill {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 5px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .iq { font-size: 13.5px; line-height: 1.5; color: var(--text); font-weight: 400; }
+  .reveal-btn {
+    margin-top: 10px;
+    padding: 5px 12px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .reveal-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .ia {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    line-height: 1.55;
+    color: #aab4c4;
+    font-weight: 300;
+  }
+  .hidden { display: none !important; }
+
   /* LIST VIEW card tweaks */
   .list-view .card {
     display: flex;
@@ -857,6 +978,9 @@
     #share-backdrop,
     .quiz-overlay,
     .copy-btn,
+    .depth-btn,
+    .depth,
+    .domain-row,
     .fav-btn { display: none !important; }
 
     header { padding-bottom: 0; }
@@ -888,6 +1012,8 @@
     }
     .full-name { color: #000 !important; font-weight: 600; }
     .definition { color: #222 !important; }
+    .why, .example { color: #222 !important; }
+    .ctx-label { color: #000 !important; opacity: 1; }
     footer { color: #000 !important; border-color: #ccc; }
   }
 </style>
@@ -918,6 +1044,17 @@
       <button class="filter-btn" data-cat="infra" data-label="Infrastructure" onclick="setFilter('infra')">Infrastructure</button>
       <button class="filter-btn fav-filter" data-cat="starred" data-label="★ Starred" onclick="setFilter('starred')">★ Starred</button>
     </div>
+    <div class="domain-filters" id="domain-filters">
+      <span class="track-label">Study tracks</span>
+      <button class="filter-btn domain-btn" data-cat="domain:iam" data-label="IAM" onclick="setFilter('domain:iam')">IAM</button>
+      <button class="filter-btn domain-btn" data-cat="domain:grc" data-label="GRC" onclick="setFilter('domain:grc')">GRC</button>
+      <button class="filter-btn domain-btn" data-cat="domain:soc" data-label="SOC / Blue Team" onclick="setFilter('domain:soc')">SOC / Blue Team</button>
+      <button class="filter-btn domain-btn" data-cat="domain:net" data-label="Networking" onclick="setFilter('domain:net')">Networking</button>
+      <button class="filter-btn domain-btn" data-cat="domain:cloud" data-label="Cloud Security" onclick="setFilter('domain:cloud')">Cloud Security</button>
+      <button class="filter-btn domain-btn" data-cat="domain:ti" data-label="Threat Intel" onclick="setFilter('domain:ti')">Threat Intel</button>
+      <button class="filter-btn domain-btn" data-cat="domain:compliance" data-label="Compliance" onclick="setFilter('domain:compliance')">Compliance</button>
+      <button class="filter-btn domain-btn" data-cat="domain:secplus" data-label="Security+ Core" onclick="setFilter('domain:secplus')">Security+ Core</button>
+    </div>
   </div>
 </header>
 
@@ -943,100 +1080,100 @@
 const data = [
   {a:"AAA",f:"Authentication, Authorization, Accounting",d:"Framework for controlling network access through user verification, permissions, and activity logging.",c:"identity"},
   {a:"ACL",f:"Access Control List",d:"Rules that define which users or systems can access specific resources.",c:"identity"},
-  {a:"AES",f:"Advanced Encryption Standard",d:"Symmetric block cipher widely used for data encryption, available in 128/192/256-bit key sizes.",c:"crypto"},
-  {a:"APT",f:"Advanced Persistent Threat",d:"Sophisticated, long-term cyberattack by well-resourced adversaries targeting specific organizations.",c:"threat"},
+  {a:"AES",f:"Advanced Encryption Standard",d:"Symmetric block cipher widely used for data encryption, available in 128/192/256-bit key sizes.",c:"crypto",why:"The worldwide standard for fast, strong symmetric encryption — protecting everything from disks to TLS sessions.",ex:"AES-256 encrypting a laptop's drive with BitLocker or FileVault.",domains:["secplus"],iq:"What is the difference between symmetric and asymmetric encryption?",ia:"Symmetric encryption (like AES) uses one shared key for both encryption and decryption — it's fast and ideal for bulk data, but you must distribute the key securely. Asymmetric encryption (like RSA) uses a public/private key pair, which solves key distribution but is far slower. In practice they're combined: asymmetric encryption securely exchanges a symmetric session key, which then encrypts the actual data — this is how TLS works."},
+  {a:"APT",f:"Advanced Persistent Threat",d:"Sophisticated, long-term cyberattack by well-resourced adversaries targeting specific organizations.",c:"threat",why:"A well-resourced, patient adversary (often nation-state) that targets specific organizations for long-term access.",ex:"A state-sponsored group quietly maintaining access to a defense contractor for months.",domains:["ti", "soc"]},
   {a:"ARP",f:"Address Resolution Protocol",d:"Maps IP addresses to physical MAC addresses on a local network.",c:"protocol"},
   {a:"BYOD",f:"Bring Your Own Device",d:"Policy allowing employees to use personal devices for work, introducing unique security challenges.",c:"compliance"},
   {a:"CA",f:"Certificate Authority",d:"Trusted entity that issues digital certificates verifying the identity of websites and organizations.",c:"crypto"},
-  {a:"CASB",f:"Cloud Access Security Broker",d:"Security policy enforcement point between cloud users and cloud services.",c:"infra"},
+  {a:"CASB",f:"Cloud Access Security Broker",d:"Security policy enforcement point between cloud users and cloud services.",c:"infra",why:"A control point between users and cloud apps — giving visibility and policy enforcement over SaaS usage.",ex:"Detecting and blocking uploads of confidential files to an unsanctioned personal Dropbox.",domains:["cloud"],tools:["Netskope", "Microsoft Defender for Cloud Apps", "Zscaler"]},
   {a:"CICD",f:"Continuous Integration / Continuous Deployment",d:"DevOps practice of automating build, test, and deployment pipelines.",c:"operations"},
-  {a:"CISO",f:"Chief Information Security Officer",d:"Senior executive responsible for an organization's information and data security strategy.",c:"compliance"},
+  {a:"CISO",f:"Chief Information Security Officer",d:"Senior executive responsible for an organization's information and data security strategy.",c:"compliance",why:"The executive who owns security strategy and answers to the board — the career north-star for many in the field.",ex:"The CISO presenting the quarterly risk posture and budget asks to the board.",domains:["grc"],roles:["CISO", "Security Director"]},
   {a:"CTEM",f:"Continuous Threat Exposure Management",d:"Ongoing process to identify, assess, and reduce an organization's attack surface.",c:"threat"},
-  {a:"CVE",f:"Common Vulnerabilities and Exposures",d:"Publicly disclosed cybersecurity vulnerabilities assigned a unique identifier.",c:"threat"},
-  {a:"CVSS",f:"Common Vulnerability Scoring System",d:"Standardized framework for rating the severity of security vulnerabilities on a 0–10 scale.",c:"threat"},
-  {a:"DDoS",f:"Distributed Denial of Service",d:"Attack that floods a target with traffic from many sources, making it unavailable.",c:"threat"},
+  {a:"CVE",f:"Common Vulnerabilities and Exposures",d:"Publicly disclosed cybersecurity vulnerabilities assigned a unique identifier.",c:"threat",why:"The universal ID system for known vulnerabilities — lets the whole industry reference the same flaw unambiguously.",ex:"CVE-2021-44228 (Log4Shell) — one identifier the entire world used to track and patch it.",domains:["ti", "secplus"]},
+  {a:"CVSS",f:"Common Vulnerability Scoring System",d:"Standardized framework for rating the severity of security vulnerabilities on a 0–10 scale.",c:"threat",why:"Scores how severe a vulnerability is (0-10) so teams can prioritize what to patch first.",ex:"A CVSS 9.8 flaw jumps the patch queue ahead of a 4.2.",domains:["ti", "grc", "secplus"]},
+  {a:"DDoS",f:"Distributed Denial of Service",d:"Attack that floods a target with traffic from many sources, making it unavailable.",c:"threat",why:"Overwhelms a target with traffic to knock it offline — a top availability threat for any public service.",ex:"A botnet flooding a website with millions of requests until it can't serve real users.",domains:["net", "ti", "secplus"]},
   {a:"DEP",f:"Data Execution Prevention",d:"Security feature that prevents code from running in memory regions marked as non-executable.",c:"threat"},
-  {a:"DFIR",f:"Digital Forensics and Incident Response",d:"Combined discipline of investigating cyber incidents and collecting digital evidence.",c:"operations"},
-  {a:"DLP",f:"Data Loss Prevention",d:"Tools and policies that detect and prevent unauthorized transmission of sensitive data.",c:"compliance"},
+  {a:"DFIR",f:"Digital Forensics and Incident Response",d:"Combined discipline of investigating cyber incidents and collecting digital evidence.",c:"operations",why:"Combines forensics and incident response to answer what happened, how far it spread, and how to recover.",ex:"Imaging a compromised laptop and reconstructing the attacker's timeline from disk and memory artifacts.",domains:["soc"],roles:["Incident Responder", "Forensic Analyst"],tools:["Velociraptor", "Magnet AXIOM", "EnCase"]},
+  {a:"DLP",f:"Data Loss Prevention",d:"Tools and policies that detect and prevent unauthorized transmission of sensitive data.",c:"compliance",why:"Stops sensitive data — PII, source code, financials — from leaving the organization, intentionally or by accident.",ex:"Blocking an email that contains a spreadsheet of customer credit-card numbers.",domains:["grc", "compliance", "secplus"],roles:["GRC Analyst", "Security Engineer"],tools:["Microsoft Purview", "Forcepoint", "Symantec DLP"]},
   {a:"DMZ",f:"Demilitarized Zone",d:"Network segment that separates internal systems from the public internet, hosting externally accessible services.",c:"network"},
-  {a:"DNS",f:"Domain Name System",d:"System that translates human-readable domain names into IP addresses.",c:"protocol"},
+  {a:"DNS",f:"Domain Name System",d:"System that translates human-readable domain names into IP addresses.",c:"protocol",why:"Translates names to addresses for the entire internet — and a frequent target for hijacking and tunneling.",ex:"Resolving example.com to its IP — and why DNS logs are gold for spotting C2 traffic.",domains:["net", "secplus"]},
   {a:"DoS",f:"Denial of Service",d:"Attack that overwhelms a system to make it unavailable to legitimate users.",c:"threat"},
   {a:"EAP",f:"Extensible Authentication Protocol",d:"Authentication framework used in wireless networks and point-to-point connections.",c:"protocol"},
-  {a:"EDR",f:"Endpoint Detection and Response",d:"Security solution that monitors endpoints for suspicious behavior and enables investigation and remediation.",c:"operations"},
-  {a:"EPSS",f:"Exploit Prediction Scoring System",d:"Model estimating the probability that a CVE will be exploited in the wild.",c:"threat"},
+  {a:"EDR",f:"Endpoint Detection and Response",d:"Security solution that monitors endpoints for suspicious behavior and enables investigation and remediation.",c:"operations",why:"Watches endpoints for malicious behavior and lets responders investigate and contain — far beyond signature antivirus.",ex:"CrowdStrike Falcon detecting and killing a process that's encrypting files like ransomware.",domains:["soc", "secplus"],roles:["SOC Analyst", "Incident Responder"],tools:["CrowdStrike Falcon", "SentinelOne", "Microsoft Defender for Endpoint"]},
+  {a:"EPSS",f:"Exploit Prediction Scoring System",d:"Model estimating the probability that a CVE will be exploited in the wild.",c:"threat",why:"Estimates the probability a vulnerability will actually be exploited — pairing real-world risk with CVSS severity.",ex:"Prioritizing a medium-CVSS bug with a high EPSS score because attackers are actively using it.",domains:["ti"]},
   {a:"FIM",f:"File Integrity Monitoring",d:"Process of validating OS and application files using checksums to detect unauthorized changes.",c:"operations"},
   {a:"FISMA",f:"Federal Information Security Management Act",d:"US law mandating federal agencies protect government information systems.",c:"compliance"},
   {a:"FTP",f:"File Transfer Protocol",d:"Standard network protocol for transferring files — unencrypted, largely replaced by SFTP.",c:"protocol"},
-  {a:"GRC",f:"Governance, Risk, and Compliance",d:"Integrated approach to managing an organization's governance, risk management, and regulatory compliance.",c:"compliance"},
-  {a:"HIPAA",f:"Health Insurance Portability and Accountability Act",d:"US law protecting sensitive patient health information from disclosure without consent.",c:"compliance"},
+  {a:"GRC",f:"Governance, Risk, and Compliance",d:"Integrated approach to managing an organization's governance, risk management, and regulatory compliance.",c:"compliance",why:"Aligns security with business risk and regulation — the governance layer that turns controls into accountability.",ex:"Mapping controls to ISO 27001 and tracking risk acceptance sign-offs in one register.",domains:["grc", "compliance"],roles:["GRC Analyst", "Risk Analyst", "Compliance Manager"],tools:["RSA Archer", "ServiceNow GRC", "Vanta"]},
+  {a:"HIPAA",f:"Health Insurance Portability and Accountability Act",d:"US law protecting sensitive patient health information from disclosure without consent.",c:"compliance",why:"US law protecting patient health data — non-compliance carries heavy fines and is a core driver of healthcare security.",ex:"Encrypting and access-logging electronic health records to meet the HIPAA Security Rule.",domains:["compliance", "grc"]},
   {a:"HIDS",f:"Host-based Intrusion Detection System",d:"Monitors a single host for suspicious activity and policy violations.",c:"operations"},
   {a:"HSM",f:"Hardware Security Module",d:"Physical device that manages and safeguards digital keys for strong authentication.",c:"crypto"},
   {a:"HTTP",f:"Hypertext Transfer Protocol",d:"Foundation of data communication on the web — unencrypted by default.",c:"protocol"},
   {a:"HTTPS",f:"HTTP Secure",d:"HTTP over TLS/SSL, encrypting data in transit between client and server.",c:"protocol"},
-  {a:"IAM",f:"Identity and Access Management",d:"Framework for managing digital identities and controlling resource access.",c:"identity"},
-  {a:"IDS",f:"Intrusion Detection System",d:"Monitors network or system traffic for suspicious activity and policy violations.",c:"operations"},
-  {a:"IPS",f:"Intrusion Prevention System",d:"Network security tool that monitors traffic and actively blocks detected threats.",c:"operations"},
-  {a:"IOC",f:"Indicator of Compromise",d:"Evidence on a network or system suggesting a security breach has occurred.",c:"threat"},
+  {a:"IAM",f:"Identity and Access Management",d:"Framework for managing digital identities and controlling resource access.",c:"identity",why:"Controls who can access which systems and data — the foundation of nearly every security program and audit.",ex:"Okta, Microsoft Entra ID, and Ping Identity are common IAM platforms.",domains:["iam", "secplus"],roles:["IAM Analyst", "Identity Engineer", "Access Administrator"],tools:["Okta", "Microsoft Entra ID", "SailPoint"]},
+  {a:"IDS",f:"Intrusion Detection System",d:"Monitors network or system traffic for suspicious activity and policy violations.",c:"operations",why:"Gives visibility into malicious traffic by alerting on it — the detective control half of network defense.",ex:"Snort or Suricata raising an alert when it sees a known exploit signature on the wire.",domains:["soc", "net", "secplus"],iq:"What is the difference between an IDS and an IPS?",ia:"An IDS (Intrusion Detection System) monitors traffic and alerts on suspicious activity but does not block it — it's passive and typically sits out-of-band. An IPS (Intrusion Prevention System) sits inline and can actively drop or block malicious traffic in real time. The trade-off: an inline IPS can add latency or become a point of failure, and a false positive can block legitimate traffic."},
+  {a:"IPS",f:"Intrusion Prevention System",d:"Network security tool that monitors traffic and actively blocks detected threats.",c:"operations",why:"The preventive counterpart to an IDS — it sits inline and actively blocks malicious traffic, not just alerts.",ex:"An inline IPS dropping packets that match an active exploit signature before they reach the server.",domains:["soc", "net", "secplus"]},
+  {a:"IOC",f:"Indicator of Compromise",d:"Evidence on a network or system suggesting a security breach has occurred.",c:"threat",why:"Concrete evidence of a breach — hashes, IPs, domains — that defenders hunt for and share to catch the same attacker elsewhere.",ex:"Blocking a known-malicious file hash and C2 domain pulled from a threat-intel feed.",domains:["soc", "ti", "secplus"]},
   {a:"IOT",f:"Internet of Things",d:"Network of physical devices embedded with sensors and software that connect to the internet.",c:"infra"},
   {a:"IP",f:"Internet Protocol",d:"Principal communications protocol for routing data packets across networks.",c:"protocol"},
   {a:"IPSec",f:"Internet Protocol Security",d:"Suite of protocols that encrypts and authenticates IP communications.",c:"crypto"},
-  {a:"ISO",f:"International Organization for Standardization",d:"Body that develops international standards including ISO 27001 for information security.",c:"compliance"},
+  {a:"ISO",f:"International Organization for Standardization",d:"Body that develops international standards including ISO 27001 for information security.",c:"compliance",why:"Sets the international standard (ISO 27001) for information security management that customers and auditors look for.",ex:"Achieving ISO 27001 certification to win enterprise customers who require it.",domains:["grc", "compliance"]},
   {a:"LDAP",f:"Lightweight Directory Access Protocol",d:"Protocol for accessing and maintaining distributed directory information services.",c:"protocol"},
   {a:"LUKS",f:"Linux Unified Key Setup",d:"Standard disk encryption specification for Linux.",c:"crypto"},
   {a:"MAC",f:"Mandatory Access Control",d:"Access control policy where the OS enforces permissions based on classification labels.",c:"identity"},
-  {a:"MFA",f:"Multi-Factor Authentication",d:"Authentication requiring two or more verification factors: something you know, have, or are.",c:"identity"},
+  {a:"MFA",f:"Multi-Factor Authentication",d:"Authentication requiring two or more verification factors: something you know, have, or are.",c:"identity",why:"The single most effective control against credential theft — a stolen password alone is no longer enough.",ex:"Approving a push notification or entering a TOTP code after typing your password.",domains:["iam", "secplus"]},
   {a:"MSP",f:"Managed Service Provider",d:"Third-party company that remotely manages a customer's IT infrastructure and systems.",c:"infra"},
   {a:"MSSP",f:"Managed Security Service Provider",d:"Outsourced provider specializing in security monitoring and management services.",c:"operations"},
-  {a:"MTTR",f:"Mean Time to Repair",d:"Average time to repair or recover a system after a failure or security incident — a key operational metric.",c:"operations"},
-  {a:"NAC",f:"Network Access Control",d:"Solution that enforces security policy compliance on devices before granting network access.",c:"network"},
+  {a:"MTTR",f:"Mean Time to Repair",d:"Average time to repair or recover a system after a failure or security incident — a key operational metric.",c:"operations",why:"A core SOC metric — how fast you recover from an incident — that leadership uses to gauge program maturity.",ex:"Cutting mean time to respond from hours to minutes by automating containment with SOAR.",domains:["soc", "grc"]},
+  {a:"NAC",f:"Network Access Control",d:"Solution that enforces security policy compliance on devices before granting network access.",c:"network",why:"Enforces who and what can join the network — a device must prove compliance before it gets access.",ex:"Cisco ISE quarantining a laptop that lacks current patches until it remediates.",domains:["net"],tools:["Cisco ISE", "Aruba ClearPass", "FortiNAC"]},
   {a:"NAT",f:"Network Address Translation",d:"Remaps one IP address space to another, commonly used to share a single public IP.",c:"network"},
-  {a:"NIST",f:"National Institute of Standards and Technology",d:"US agency that publishes widely adopted cybersecurity frameworks including the CSF and SP 800 series.",c:"compliance"},
+  {a:"NIST",f:"National Institute of Standards and Technology",d:"US agency that publishes widely adopted cybersecurity frameworks including the CSF and SP 800 series.",c:"compliance",why:"Publishes the frameworks (CSF, 800-53) that much of the industry and US government build their programs on.",ex:"Using the NIST Cybersecurity Framework's Identify-Protect-Detect-Respond-Recover to structure a program.",domains:["grc", "compliance", "secplus"]},
   {a:"NIDS",f:"Network Intrusion Detection System",d:"Monitors entire network traffic for threats, unlike host-based IDS.",c:"operations"},
   {a:"NTP",f:"Network Time Protocol",d:"Protocol for synchronizing clocks across networked devices — critical for log correlation.",c:"protocol"},
-  {a:"OAUTH",f:"Open Authorization",d:"Open standard protocol for token-based authorization and delegated access.",c:"identity"},
-  {a:"OSINT",f:"Open Source Intelligence",d:"Intelligence gathered from publicly available sources to support security investigations.",c:"operations"},
+  {a:"OAUTH",f:"Open Authorization",d:"Open standard protocol for token-based authorization and delegated access.",c:"identity",why:"Lets apps access data on your behalf without ever seeing your password — the backbone of modern delegated access.",ex:"Granting a third-party app access to your Google Calendar via a consent screen.",domains:["iam"]},
+  {a:"OSINT",f:"Open Source Intelligence",d:"Intelligence gathered from publicly available sources to support security investigations.",c:"operations",why:"Turns publicly available data into intelligence — used by both attackers for recon and defenders for investigation.",ex:"Using Shodan to find an organization's internet-exposed services before an attacker does.",domains:["ti", "soc"],tools:["Maltego", "Shodan", "theHarvester"]},
   {a:"OWASP",f:"Open Web Application Security Project",d:"Nonprofit providing free resources on web application security, including the famous Top 10 list.",c:"compliance"},
-  {a:"PAM",f:"Privileged Access Management",d:"Tools and processes for securing, managing, and monitoring privileged accounts.",c:"identity"},
-  {a:"PCI DSS",f:"Payment Card Industry Data Security Standard",d:"Security standards for organizations handling credit card data.",c:"compliance"},
+  {a:"PAM",f:"Privileged Access Management",d:"Tools and processes for securing, managing, and monitoring privileged accounts.",c:"identity",why:"Secures the most dangerous accounts — admins and service accounts — that attackers prize most.",ex:"CyberArk vaulting a domain-admin password and rotating it after each checkout.",domains:["iam"],roles:["IAM Engineer", "PAM Administrator"],tools:["CyberArk", "BeyondTrust", "Delinea"]},
+  {a:"PCI DSS",f:"Payment Card Industry Data Security Standard",d:"Security standards for organizations handling credit card data.",c:"compliance",why:"The mandatory standard for anyone handling card data — failing it can cut off a business's ability to take payments.",ex:"Segmenting and encrypting the network zone where credit-card numbers are processed.",domains:["compliance", "grc"]},
   {a:"PGP",f:"Pretty Good Privacy",d:"Encryption program providing cryptographic privacy and authentication for data communications.",c:"crypto"},
   {a:"PHI",f:"Protected Health Information",d:"Individually identifiable health information protected under HIPAA.",c:"compliance"},
   {a:"PII",f:"Personally Identifiable Information",d:"Data that could be used to identify a specific individual, such as SSN, email, or biometrics.",c:"compliance"},
-  {a:"PKI",f:"Public Key Infrastructure",d:"System of roles, policies, and procedures for creating, managing, and distributing digital certificates.",c:"crypto"},
+  {a:"PKI",f:"Public Key Infrastructure",d:"System of roles, policies, and procedures for creating, managing, and distributing digital certificates.",c:"crypto",why:"The system of keys, certificates, and authorities that makes encryption and digital identity trustworthy at scale.",ex:"A Certificate Authority issuing the TLS certificate that proves a website is who it claims to be.",domains:["secplus"],roles:["PKI Engineer", "Security Engineer"]},
   {a:"POC",f:"Proof of Concept",d:"In security, code or demonstration proving a vulnerability is exploitable.",c:"threat"},
   {a:"RBA",f:"Risk-Based Authentication",d:"Dynamically adjusts authentication requirements based on context and risk score.",c:"identity"},
-  {a:"RBAC",f:"Role-Based Access Control",d:"Restricts system access based on a user's organizational role.",c:"identity"},
+  {a:"RBAC",f:"Role-Based Access Control",d:"Restricts system access based on a user's organizational role.",c:"identity",why:"Scales access management by tying permissions to job roles instead of individuals — easier to audit and least-privilege by design.",ex:"All 'SOC Analyst' role members automatically inherit read access to the SIEM.",domains:["iam", "secplus"]},
   {a:"RDP",f:"Remote Desktop Protocol",d:"Microsoft protocol enabling remote GUI access to a Windows system — frequent attack target.",c:"protocol"},
   {a:"RFC",f:"Request for Comments",d:"Published standards and protocols from the IETF defining internet specifications.",c:"protocol"},
   {a:"RTO",f:"Recovery Time Objective",d:"Maximum acceptable downtime after a disaster before business impact becomes unacceptable.",c:"operations"},
   {a:"RPO",f:"Recovery Point Objective",d:"Maximum acceptable amount of data loss measured in time during a recovery scenario.",c:"operations"},
-  {a:"SAML",f:"Security Assertion Markup Language",d:"XML-based standard for exchanging authentication and authorization data between parties.",c:"identity"},
+  {a:"SAML",f:"Security Assertion Markup Language",d:"XML-based standard for exchanging authentication and authorization data between parties.",c:"identity",why:"The XML standard that makes enterprise SSO work between an identity provider and apps.",ex:"An Okta IdP issuing a SAML assertion so an employee can reach Salesforce without a second login.",domains:["iam"],tools:["Okta", "Microsoft Entra ID", "Ping Identity"]},
   {a:"SCAP",f:"Security Content Automation Protocol",d:"NIST specification for standardizing security configuration checks and vulnerability reporting.",c:"compliance"},
-  {a:"SIEM",f:"Security Information and Event Management",d:"Platform that aggregates, correlates, and analyzes security event data across an environment.",c:"operations"},
+  {a:"SIEM",f:"Security Information and Event Management",d:"Platform that aggregates, correlates, and analyzes security event data across an environment.",c:"operations",why:"The central nervous system of a SOC — correlates logs across the whole estate to surface attacks no single tool sees.",ex:"Splunk, Microsoft Sentinel, and Elastic Security are common SIEM platforms.",domains:["soc", "ti", "secplus"],roles:["SOC Analyst", "Detection Engineer", "Security Engineer"],tools:["Splunk", "Microsoft Sentinel", "Elastic Security"],iq:"What is the difference between a SIEM and an EDR?",ia:"A SIEM aggregates and correlates logs from across many systems for broad, organization-wide visibility, while an EDR focuses on detecting and responding to threats on individual endpoints. They're complementary — a SIEM often ingests EDR alerts as one of its data sources."},
   {a:"SMTP",f:"Simple Mail Transfer Protocol",d:"Protocol for sending email across networks.",c:"protocol"},
   {a:"SNMP",f:"Simple Network Management Protocol",d:"Protocol for collecting and organizing information about managed network devices.",c:"protocol"},
-  {a:"SOC",f:"Security Operations Center",d:"Centralized team monitoring and responding to cybersecurity threats around the clock.",c:"operations"},
-  {a:"SOAR",f:"Security Orchestration, Automation, and Response",d:"Platforms that automate security workflows and streamline incident response.",c:"operations"},
+  {a:"SOC",f:"Security Operations Center",d:"Centralized team monitoring and responding to cybersecurity threats around the clock.",c:"operations",why:"The team and function that monitors, detects, and responds to threats around the clock — where most cyber careers begin.",ex:"A tiered SOC: Tier 1 triages alerts, Tier 2 investigates, Tier 3 hunts and handles major incidents.",domains:["soc", "secplus"],roles:["SOC Analyst (Tier 1-3)", "SOC Manager", "Detection Engineer"],tools:["SIEM", "SOAR", "EDR"]},
+  {a:"SOAR",f:"Security Orchestration, Automation, and Response",d:"Platforms that automate security workflows and streamline incident response.",c:"operations",why:"Automates repetitive SOC work — enrichment, ticketing, containment — so analysts focus on real decisions, not toil.",ex:"A playbook that auto-isolates a host and opens a ticket the moment EDR flags ransomware behavior.",domains:["soc"],roles:["SOC Analyst", "Automation Engineer"],tools:["Splunk SOAR", "Cortex XSOAR", "Tines"]},
   {a:"SOX",f:"Sarbanes-Oxley Act",d:"US law requiring accurate financial reporting and internal controls — affects IT audit and compliance.",c:"compliance"},
   {a:"SPF",f:"Sender Policy Framework",d:"Email authentication method specifying which mail servers can send on behalf of a domain.",c:"protocol"},
   {a:"SQL",f:"Structured Query Language",d:"Language for managing databases — SQL injection is one of the most common web vulnerabilities.",c:"threat"},
   {a:"SSH",f:"Secure Shell",d:"Cryptographic protocol for secure remote login and command execution over an unsecured network.",c:"protocol"},
   {a:"SSL",f:"Secure Sockets Layer",d:"Predecessor to TLS — deprecated but the term is still commonly used to mean TLS.",c:"crypto"},
-  {a:"SSO",f:"Single Sign-On",d:"Authentication scheme allowing users to log in once and access multiple applications.",c:"identity"},
+  {a:"SSO",f:"Single Sign-On",d:"Authentication scheme allowing users to log in once and access multiple applications.",c:"identity",why:"Lets users authenticate once and reach many apps — improving security (fewer passwords) and user experience at once.",ex:"Logging into Gmail, Slack, and Zoom through one corporate Okta or Entra ID login.",domains:["iam", "secplus"],roles:["Identity Engineer", "IAM Analyst"],tools:["Okta", "Microsoft Entra ID", "Ping Identity"]},
   {a:"STIG",f:"Security Technical Implementation Guide",d:"DISA configuration standards for securing DoD IT systems.",c:"compliance"},
   {a:"SWG",f:"Secure Web Gateway",d:"Security solution that filters internet traffic to enforce acceptable use and protect against threats.",c:"network"},
-  {a:"TCP",f:"Transmission Control Protocol",d:"Core internet protocol ensuring reliable, ordered, error-checked delivery of data packets.",c:"protocol"},
-  {a:"TLS",f:"Transport Layer Security",d:"Cryptographic protocol securing communications over a network — the current standard replacing SSL.",c:"crypto"},
+  {a:"TCP",f:"Transmission Control Protocol",d:"Core internet protocol ensuring reliable, ordered, error-checked delivery of data packets.",c:"protocol",why:"The reliable, ordered transport behind web, email, and file transfer — guarantees delivery via handshakes and retransmission.",ex:"The three-way handshake (SYN, SYN-ACK, ACK) that starts every web page load.",domains:["net", "secplus"],iq:"What is the difference between TCP and UDP?",ia:"TCP is connection-oriented and reliable — it establishes a session with a three-way handshake, guarantees ordered delivery, and retransmits lost packets, making it ideal for web, email, and file transfer. UDP is connectionless and best-effort — no handshake or delivery guarantees — which makes it faster and suited to streaming, DNS, and VoIP, where speed matters more than perfect delivery."},
+  {a:"TLS",f:"Transport Layer Security",d:"Cryptographic protocol securing communications over a network — the current standard replacing SSL.",c:"crypto",why:"Encrypts data in transit and authenticates servers — the 's' in HTTPS and the bedrock of web trust.",ex:"The padlock in your browser: TLS securing the connection between you and your bank.",domains:["net", "secplus"]},
   {a:"TTPs",f:"Tactics, Techniques, and Procedures",d:"Description of how threat actors operate, used to characterize and attribute cyberattacks.",c:"threat"},
   {a:"UAT",f:"User Acceptance Testing",d:"Final testing phase ensuring software meets requirements before deployment.",c:"operations"},
   {a:"UDP",f:"User Datagram Protocol",d:"Connectionless transport protocol offering speed over reliability — used in video streaming, DNS.",c:"protocol"},
   {a:"UEM",f:"Unified Endpoint Management",d:"Single platform to manage all endpoints including desktops, mobile, and IoT.",c:"infra"},
   {a:"URL",f:"Uniform Resource Locator",d:"Web address specifying the location of a resource on the internet.",c:"protocol"},
   {a:"UTM",f:"Unified Threat Management",d:"All-in-one security appliance combining firewall, IDS/IPS, antivirus, and more.",c:"network"},
-  {a:"VPN",f:"Virtual Private Network",d:"Encrypted tunnel that secures internet traffic and masks user IP addresses.",c:"network"},
-  {a:"WAF",f:"Web Application Firewall",d:"Filters and monitors HTTP traffic between a web app and the internet to block attacks.",c:"network"},
-  {a:"XDR",f:"Extended Detection and Response",d:"Unified security platform integrating multiple tools to detect and respond to threats across layers.",c:"operations"},
+  {a:"VPN",f:"Virtual Private Network",d:"Encrypted tunnel that secures internet traffic and masks user IP addresses.",c:"network",why:"Encrypts traffic over untrusted networks so remote users reach internal resources securely.",ex:"A remote employee tunneling into the corporate network from a coffee-shop Wi-Fi.",domains:["net", "secplus"]},
+  {a:"WAF",f:"Web Application Firewall",d:"Filters and monitors HTTP traffic between a web app and the internet to block attacks.",c:"network",why:"Shields web apps from common attacks like SQL injection and XSS at the HTTP layer.",ex:"Cloudflare or AWS WAF filtering a request that tries to inject SQL into a login form.",domains:["net", "cloud", "secplus"],tools:["Cloudflare", "AWS WAF", "F5"]},
+  {a:"XDR",f:"Extended Detection and Response",d:"Unified security platform integrating multiple tools to detect and respond to threats across layers.",c:"operations",why:"Unifies detection across endpoint, network, email, and cloud so analysts see one correlated story, not siloed alerts.",ex:"Linking a phishing email, the endpoint it landed on, and the lateral movement that followed into one incident.",domains:["soc", "ti"],tools:["Palo Alto Cortex XDR", "CrowdStrike", "Microsoft Defender XDR"]},
   {a:"XSS",f:"Cross-Site Scripting",d:"Injection attack where malicious scripts are embedded into trusted web pages viewed by other users.",c:"threat"},
-  {a:"ZTNA",f:"Zero Trust Network Access",d:"Security model requiring strict identity verification for every user and device, regardless of location.",c:"network"},
+  {a:"ZTNA",f:"Zero Trust Network Access",d:"Security model requiring strict identity verification for every user and device, regardless of location.",c:"network",why:"Replaces the implicit trust of a VPN with per-request verification — 'never trust, always verify' for remote access.",ex:"Zscaler or Cloudflare Access granting a contractor one specific app, not the whole network.",domains:["net", "cloud", "secplus"],tools:["Zscaler", "Cloudflare Access", "Netskope"]},
   {a:"ZAP",f:"Zed Attack Proxy",d:"OWASP open-source tool for finding security vulnerabilities in web applications.",c:"threat"},
   {a:"RSA",f:"Rivest-Shamir-Adleman",d:"Widely used public-key encryption algorithm for securing data transmission and digital signatures.",c:"crypto"},
   {a:"DSA",f:"Digital Signature Algorithm",d:"NIST standard algorithm for generating and verifying digital signatures.",c:"crypto"},
@@ -1069,7 +1206,7 @@ const data = [
   {a:"IdP",f:"Identity Provider",d:"System that creates, maintains, and manages identity information and provides authentication services.",c:"identity"},
   {a:"DAC",f:"Discretionary Access Control",d:"Access control model where the resource owner decides who can access their resources.",c:"identity"},
   {a:"ABAC",f:"Attribute-based Access Control",d:"Access control model granting permissions based on attributes of users, resources, and environment.",c:"identity"},
-  {a:"MDM",f:"Mobile Device Management",d:"Software for managing, monitoring, and securing employee mobile devices deployed across an organization.",c:"identity"},
+  {a:"MDM",f:"Mobile Device Management",d:"Software for managing, monitoring, and securing employee mobile devices deployed across an organization.",c:"identity",why:"Manages and secures the fleet of phones and laptops — enforcing encryption, policy, and remote wipe.",ex:"Microsoft Intune pushing a passcode policy and remotely wiping a lost company phone.",domains:["cloud", "secplus"],tools:["Microsoft Intune", "Jamf", "VMware Workspace ONE"]},
   {a:"DHCP",f:"Dynamic Host Configuration Protocol",d:"Network protocol that automatically assigns IP addresses and other network configuration to devices.",c:"protocol"},
   {a:"ICMP",f:"Internet Control Message Protocol",d:"Used by network devices to send error messages and operational information — basis of ping and traceroute.",c:"protocol"},
   {a:"BGP",f:"Border Gateway Protocol",d:"Routing protocol that manages how data is routed between autonomous systems on the internet.",c:"protocol"},
@@ -1084,7 +1221,7 @@ const data = [
   {a:"NGFW",f:"Next-generation Firewall",d:"Advanced firewall with deep packet inspection, intrusion prevention, and application awareness beyond port/protocol.",c:"network"},
   {a:"VLAN",f:"Virtual Local Area Network",d:"Logical segmentation of a network grouping devices regardless of physical location.",c:"network"},
   {a:"SD-WAN",f:"Software-defined Wide Area Network",d:"Uses software to control connectivity and services between data centers and remote sites.",c:"network"},
-  {a:"SASE",f:"Secure Access Service Edge",d:"Cloud architecture combining WAN capabilities with security functions like CASB and ZTNA.",c:"network"},
+  {a:"SASE",f:"Secure Access Service Edge",d:"Cloud architecture combining WAN capabilities with security functions like CASB and ZTNA.",c:"network",why:"Converges networking and security into one cloud-delivered service for the distributed, work-from-anywhere era.",ex:"Zscaler or Palo Alto Prisma routing and securing all branch and remote traffic through the cloud.",domains:["cloud", "net"],tools:["Zscaler", "Palo Alto Prisma", "Cato Networks"]},
   {a:"WIDS",f:"Wireless Intrusion Detection System",d:"Monitors wireless network traffic for suspicious activity and unauthorized access points.",c:"network"},
   {a:"WIPS",f:"Wireless Intrusion Prevention System",d:"Actively monitors and blocks threats on wireless networks, including rogue access points.",c:"network"},
   {a:"SQLi",f:"SQL Injection",d:"Attack inserting malicious SQL code into a query to manipulate or extract database data.",c:"threat"},
@@ -1115,11 +1252,11 @@ const data = [
   {a:"PCAP",f:"Packet Capture",d:"Recording of network packets for analysis — essential tool in incident investigation and forensics.",c:"operations"},
   {a:"HIPS",f:"Host-based Intrusion Prevention System",d:"Security software on an endpoint that monitors and actively blocks malicious activity in real time.",c:"operations"},
   {a:"NIPS",f:"Network-based Intrusion Prevention System",d:"Inline network device that inspects traffic and actively blocks detected threats.",c:"operations"},
-  {a:"IaaS",f:"Infrastructure as a Service",d:"Cloud model where the provider manages virtualized computing resources — customer manages OS and above.",c:"infra"},
-  {a:"PaaS",f:"Platform as a Service",d:"Cloud model providing a platform for developers to build apps without managing underlying infrastructure.",c:"infra"},
-  {a:"SaaS",f:"Software as a Service",d:"Cloud model delivering software over the internet — provider manages everything, user just uses the app.",c:"infra"},
+  {a:"IaaS",f:"Infrastructure as a Service",d:"Cloud model where the provider manages virtualized computing resources — customer manages OS and above.",c:"infra",why:"Renting raw compute and storage in the cloud — you secure everything above the hypervisor (the shared-responsibility line).",ex:"Running and hardening your own VMs and networks on AWS EC2 or Azure VMs.",domains:["cloud", "secplus"]},
+  {a:"PaaS",f:"Platform as a Service",d:"Cloud model providing a platform for developers to build apps without managing underlying infrastructure.",c:"infra",why:"A managed platform to build on — the provider secures the OS and runtime, you secure your app and data.",ex:"Deploying code to Azure App Service or Heroku without managing the underlying servers.",domains:["cloud", "secplus"]},
+  {a:"SaaS",f:"Software as a Service",d:"Cloud model delivering software over the internet — provider manages everything, user just uses the app.",c:"infra",why:"Ready-to-use cloud software where you mainly secure access and data — the model behind most business apps today.",ex:"Using Microsoft 365 or Salesforce, where your job is identity, sharing, and config — not servers.",domains:["cloud", "secplus"]},
   {a:"CSP",f:"Cloud Service Provider",d:"Company offering cloud computing services including storage, servers, and software.",c:"infra"},
-  {a:"VPC",f:"Virtual Private Cloud",d:"Isolated cloud environment within a public cloud, providing dedicated resources and network controls.",c:"infra"},
+  {a:"VPC",f:"Virtual Private Cloud",d:"Isolated cloud environment within a public cloud, providing dedicated resources and network controls.",c:"infra",why:"Your private, isolated network inside a public cloud — the boundary you segment and control.",ex:"An AWS VPC with public and private subnets separating web servers from databases.",domains:["cloud"]},
   {a:"SDN",f:"Software-defined Networking",d:"Network architecture separating the control plane from the data plane, managed via software.",c:"infra"},
   {a:"SCADA",f:"Supervisory Control and Data Acquisition",d:"Industrial control system used to monitor and control physical infrastructure like power grids and pipelines.",c:"infra"},
   {a:"ICS",f:"Industrial Control Systems",d:"Systems managing industrial operations — critical infrastructure targets including SCADA and PLCs.",c:"infra"},
@@ -1130,7 +1267,7 @@ const data = [
   {a:"AH",f:"Authentication Header",d:"IPSec protocol that provides data integrity and authentication for IP packets but does not encrypt the payload.",c:"crypto"},
   {a:"AI",f:"Artificial Intelligence",d:"Machine learning-based systems used in cybersecurity for threat detection, anomaly analysis, and automated response.",c:"infra"},
   {a:"AP",f:"Access Point",d:"Wireless networking device that allows Wi-Fi devices to connect to a wired network.",c:"network"},
-  {a:"ATT&CK",f:"Adversarial Tactics, Techniques, and Common Knowledge",d:"MITRE framework documenting real-world adversary behaviors organized as a matrix of tactics and techniques.",c:"threat"},
+  {a:"ATT&CK",f:"Adversarial Tactics, Techniques, and Common Knowledge",d:"MITRE framework documenting real-world adversary behaviors organized as a matrix of tactics and techniques.",c:"threat",why:"MITRE's knowledge base of real attacker tactics and techniques — the shared language for detection and threat intel.",ex:"Mapping a detection to technique T1059 (Command and Scripting Interpreter) in the ATT&CK matrix.",domains:["ti", "soc"],tools:["MITRE ATT&CK Navigator"]},
   {a:"AV",f:"Antivirus",d:"Software that detects and removes malware by scanning files and processes for known malicious signatures.",c:"operations"},
   {a:"BASH",f:"Bourne Again Shell",d:"Default Unix/Linux command-line shell commonly used in scripting, automation, and security tooling.",c:"operations"},
   {a:"BIOS",f:"Basic Input/Output System",d:"Firmware initializing hardware during boot — a target for rootkits and firmware attacks.",c:"infra"},
@@ -1295,6 +1432,13 @@ const labelMap = {
   operations:"Operations & IR", infra:"Infrastructure"
 };
 
+// Study tracks — a second, multi-tag axis (a term can belong to several). Separate
+// from the color categories above; see the optional `domains` array on data entries.
+const domainMap = {
+  iam:"IAM", grc:"GRC", soc:"SOC / Blue Team", net:"Networking",
+  cloud:"Cloud Security", ti:"Threat Intel", compliance:"Compliance", secplus:"Security+ Core"
+};
+
 let currentCat = '';
 let currentView = 'grid';
 
@@ -1328,7 +1472,10 @@ function matchQuery(x, q) {
   return !q || x.a.toLowerCase().includes(q) || x.f.toLowerCase().includes(q) || x.d.toLowerCase().includes(q);
 }
 function matchCat(x, cat) {
-  return cat === 'starred' ? favs.has(x.a) : (!cat || x.c === cat);
+  if (!cat) return true;
+  if (cat === 'starred') return favs.has(x.a);
+  if (cat.indexOf('domain:') === 0) return Array.isArray(x.domains) && x.domains.includes(cat.slice(7));
+  return x.c === cat;
 }
 
 function anchorId(a) {
@@ -1368,6 +1515,13 @@ function setView(v) {
 
 function escAttr(s) {
   return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Toggle the element immediately after a disclosure button (Career, Interview, Show-answer).
+// Relative traversal keeps it self-contained so a full re-render resets every card cleanly.
+function toggleNext(btn) {
+  const el = btn.nextElementSibling;
+  if (el) el.classList.toggle('hidden');
 }
 
 function copyCard(btn) {
@@ -1462,6 +1616,36 @@ function render() {
       (on ? 'Unstar' : 'Star') + '" aria-label="Star ' + escAttr(x.a) + '" onclick="toggleFav(\'' + aEsc + '\', this, event)">' +
       (on ? '★' : '☆') + '</button>';
     const copyBtn = '<button class="copy-btn" data-a="' + escAttr(x.a) + '" data-f="' + escAttr(x.f) + '" data-d="' + escAttr(x.d) + '" data-tip="Copy definition" onclick="event.stopPropagation();copyCard(this)">⎘</button>';
+
+    // ── Optional authored depth (renders only when the data exists) ──
+    const domHtml = (Array.isArray(x.domains) && x.domains.length)
+      ? '<div class="domain-row">' + x.domains.map(d =>
+          '<span class="domain-chip" onclick="event.stopPropagation();setFilter(\'domain:' + d + '\')" title="Filter by ' + (domainMap[d] || d) + '">' + (domainMap[d] || d) + '</span>'
+        ).join('') + '</div>'
+      : '';
+    const whyHtml = x.why ? '<div class="why"><span class="ctx-label">Why it matters</span>' + x.why + '</div>' : '';
+    const exHtml  = x.ex  ? '<div class="example"><span class="ctx-label">Example</span>' + x.ex + '</div>' : '';
+    let careerHtml = '';
+    if (x.roles || x.tools) {
+      careerHtml = '<button class="depth-btn" onclick="event.stopPropagation();toggleNext(this)">💼 Career</button>' +
+        '<div class="depth hidden">' +
+          (x.roles ? '<div class="depth-sub"><span class="ctx-label">Common roles</span><div class="pill-row">' +
+            x.roles.map(r => '<span class="pill">' + r + '</span>').join('') + '</div></div>' : '') +
+          (x.tools ? '<div class="depth-sub"><span class="ctx-label">Tools</span><div class="pill-row">' +
+            x.tools.map(t => '<span class="pill">' + t + '</span>').join('') + '</div></div>' : '') +
+        '</div>';
+    }
+    let iqHtml = '';
+    if (x.iq) {
+      iqHtml = '<button class="depth-btn" onclick="event.stopPropagation();toggleNext(this)">🎤 Interview question</button>' +
+        '<div class="depth hidden">' +
+          '<div class="iq">' + x.iq + '</div>' +
+          '<button class="reveal-btn" onclick="event.stopPropagation();toggleNext(this)">Show answer</button>' +
+          '<div class="ia hidden">' + (x.ia || '') + '</div>' +
+        '</div>';
+    }
+    const extra = domHtml + whyHtml + exHtml + careerHtml + iqHtml;
+
     if (listView) {
       return '<div class="card" id="' + id + '" data-cat="' + x.c + '" style="animation-delay:' + Math.min(i*0.02,0.4) + 's">' +
         '<div class="list-left">' +
@@ -1471,6 +1655,7 @@ function render() {
         '<div class="list-body">' +
           '<div class="full-name">' + x.f + '</div>' +
           '<div class="definition">' + x.d + '</div>' +
+          extra +
         '</div>' +
         favBtn +
         copyBtn +
@@ -1487,6 +1672,7 @@ function render() {
       '</div>' +
       '<div class="full-name">' + x.f + '</div>' +
       '<div class="definition">' + x.d + '</div>' +
+      extra +
     '</div>';
   };
 
@@ -1531,7 +1717,7 @@ data.sort((a, b) => a.a.localeCompare(b.a, undefined, {sensitivity: 'base'}));
     "url": PAGE_URL,
     "inLanguage": "en",
     "hasDefinedTerm": data.map(function(x) {
-      return { "@type": "DefinedTerm", "name": x.a, "description": x.f + " — " + x.d };
+      return { "@type": "DefinedTerm", "name": x.a, "description": x.f + " — " + x.d + (x.why ? " " + x.why : "") };
     })
   };
   const s = document.createElement('script');
